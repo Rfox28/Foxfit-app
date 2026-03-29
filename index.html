@@ -12,7 +12,6 @@
 
 <!-- Inline SVG app icon (works as apple-touch-icon via JS below) -->
 <link rel="apple-touch-icon" id="appIcon" href="">
-<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Mono:ital,wght@0,400;0,500;1,400&family=Barlow+Semi+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -211,6 +210,86 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 100px;}
 .del-btn:hover{color:var(--red);}
 .empty-state{text-align:center;padding:48px 20px;color:var(--ink3);font-family:var(--font-mono);font-size:12px;letter-spacing:1px;}
 
+
+/* ── HISTORY EDIT MODAL ── */
+.hist-edit-modal-inner { background:var(--surface); width:100%; max-width:480px; max-height:85vh; overflow-y:auto; border-top:3px solid var(--blue); padding:24px; }
+/* ── BODY METRICS ── */
+.body-log-form { background:var(--surface); border:1px solid var(--border); padding:18px 20px; margin-bottom:20px; }
+.body-form-row { display:grid; grid-template-columns:1fr 1fr 140px; gap:10px; align-items:end; margin-top:12px; }
+@media(max-width:500px){ .body-form-row { grid-template-columns:1fr 1fr; } .body-form-row .body-submit { grid-column:1/-1; } }
+.body-field-wrap { display:flex; flex-direction:column; gap:4px; }
+.body-field-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); font-family:var(--font-mono); }
+.body-field { background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-mono); font-size:16px; padding:9px 12px; width:100%; -moz-appearance:textfield; }
+.body-field::-webkit-inner-spin-button,.body-field::-webkit-outer-spin-button{-webkit-appearance:none;}
+.body-field:focus { outline:none; border-color:var(--ink); background:var(--surface); }
+.body-submit { background:var(--ink); color:var(--bg); border:none; padding:10px 20px; font-family:var(--font-display); font-size:18px; letter-spacing:2px; cursor:pointer; width:100%; transition:background 0.15s; }
+.body-submit:hover { background:#333; }
+
+.body-stat-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.body-stat-card { background:var(--surface); border:1px solid var(--border); padding:14px 16px; }
+.bsc-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); font-family:var(--font-mono); margin-bottom:4px; }
+.bsc-val { font-family:var(--font-display); font-size:40px; letter-spacing:1px; line-height:1; }
+.bsc-unit { font-family:var(--font-mono); font-size:12px; color:var(--ink3); }
+.bsc-delta { font-family:var(--font-mono); font-size:11px; margin-top:4px; }
+.bsc-delta.up { color:var(--orange); }
+.bsc-delta.down { color:var(--lime); }
+.bsc-delta.neutral { color:var(--ink3); }
+
+.body-chart-wrap { background:var(--surface); border:1px solid var(--border); padding:16px; margin-bottom:20px; }
+.body-chart-title { font-family:var(--font-display); font-size:18px; letter-spacing:1px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:baseline; }
+.body-chart-subtitle { font-family:var(--font-mono); font-size:10px; color:var(--ink3); }
+
+.body-table { width:100%; border-collapse:collapse; }
+.body-table th { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); padding:6px 10px; background:var(--surface2); border:1px solid var(--border); text-align:left; }
+.body-table td { font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:1px solid var(--border); color:var(--ink2); }
+.body-table tr:first-child td { color:var(--ink); font-weight:500; background:#f8f6f2; }
+.body-table td.delta-up { color:var(--orange); }
+.body-table td.delta-down { color:var(--lime); }
+.body-del-btn { background:none; border:none; color:var(--border2); cursor:pointer; font-size:12px; padding:2px 6px; }
+.body-del-btn:hover { color:var(--red); }
+.chart-toggle { display:flex; gap:0; margin-bottom:14px; }
+.ct-btn { padding:6px 14px; font-family:var(--font-mono); font-size:10px; letter-spacing:1px; border:1px solid var(--border); background:var(--surface2); color:var(--ink3); cursor:pointer; transition:all 0.12s; }
+.ct-btn:first-child { border-right:none; }
+.ct-btn.active { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+
+/* ── NUTRITION ── */
+.day-type-badge { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:3px 8px; margin-bottom:16px; }
+.day-deficit  { background:#1a1814; color:#8fbe00; }
+.day-surplus  { background:#e85d00; color:#fff; }
+.day-moderate { background:#d4a000; color:#fff; }
+.day-controlled { background:#0057a8; color:#fff; }
+
+.macro-ring-row { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; margin-bottom:20px; }
+.macro-ring-card { background:var(--surface); border:1px solid var(--border); padding:12px 8px 10px; text-align:center; }
+.macro-val { font-family:var(--font-display); font-size:28px; letter-spacing:1px; line-height:1; }
+.macro-target { font-family:var(--font-mono); font-size:9px; color:var(--ink3); letter-spacing:1px; margin-top:2px; }
+.macro-label { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); margin-top:4px; }
+.macro-bar-wrap { height:3px; background:var(--border); margin-top:6px; }
+.macro-bar { height:3px; background:var(--lime); transition:width 0.4s ease; max-width:100%; }
+.macro-bar.over { background:var(--orange); }
+
+.meal-card { background:var(--surface); border:1px solid var(--border); margin-bottom:8px; display:flex; align-items:stretch; overflow:hidden; transition:border-color 0.2s; }
+.meal-card.logged { border-color:var(--lime); opacity:0.7; }
+.meal-log-btn { background:var(--surface2); border:none; border-right:1px solid var(--border); padding:0 14px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:20px; transition:background 0.15s; flex-shrink:0; min-width:52px; }
+.meal-log-btn:hover { background:var(--border); }
+.meal-log-btn.logged { background:var(--lime); }
+.meal-info { padding:12px 14px; flex:1; min-width:0; }
+.meal-name { font-family:var(--font-display); font-size:20px; letter-spacing:1px; line-height:1; margin-bottom:3px; }
+.meal-macros { font-family:var(--font-mono); font-size:10px; color:var(--ink3); letter-spacing:1px; display:flex; flex-wrap:wrap; gap:8px; }
+.meal-macros span { white-space:nowrap; }
+.meal-kcal { font-family:var(--font-display); font-size:16px; color:var(--ink2); padding:12px 14px 12px 0; display:flex; align-items:center; flex-shrink:0; }
+
+.nutr-section-label { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--ink3); margin:20px 0 10px; }
+
+.weekly-day-row { display:grid; grid-template-columns:80px 1fr 60px; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--bg2); }
+.weekly-day-row:last-child { border:none; }
+.wdr-day { font-family:var(--font-mono); font-size:11px; color:var(--ink2); }
+.wdr-bar-wrap { height:8px; background:var(--border); }
+.wdr-bar { height:8px; background:var(--lime); }
+.wdr-bar.surplus { background:var(--orange); }
+.wdr-kcal { font-family:var(--font-mono); font-size:10px; color:var(--ink3); text-align:right; }
+
+/* ── EDIT MODE ── */
 /* ── EDIT MODE ── */
 .edit-banner{background:var(--ink);color:var(--lime);padding:8px 20px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:center;display:none;}
 .edit-banner.active{display:block;}
@@ -220,13 +299,14 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 100px;}
 .edit-session-name{font-family:var(--font-display);font-size:28px;letter-spacing:1px;}
 .edit-session-sub{font-size:11px;color:var(--ink3);font-family:var(--font-mono);margin-top:2px;}
 
-.edit-ex-row{display:grid;grid-template-columns:1fr 60px 70px 80px 60px auto;gap:6px;align-items:center;padding:8px 18px;border-bottom:1px solid var(--bg2);}
-.edit-ex-row:last-child{border-bottom:none;}
-@media(max-width:600px){
-  .edit-ex-row{grid-template-columns:1fr 50px 60px 70px 50px auto;gap:4px;padding:7px 12px;}
-}
-.edit-col-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);font-family:var(--font-mono);padding:4px 18px 0;display:grid;grid-template-columns:1fr 60px 70px 80px 60px auto;gap:6px;}
-@media(max-width:600px){.edit-col-label{grid-template-columns:1fr 50px 60px 70px 50px auto;gap:4px;padding:4px 12px 0;}}
+.edit-table{width:100%;border-collapse:collapse;}
+.edit-table th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);font-family:var(--font-mono);padding:6px 8px 6px 18px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--border);}
+.edit-table th:first-child{padding-left:18px;}
+.edit-table td{padding:5px 6px 5px 6px;border-bottom:1px solid var(--bg2);vertical-align:middle;}
+.edit-table td:first-child{padding-left:18px;}
+.edit-table td:last-child{padding-right:14px;}
+.edit-table tr:last-child td{border-bottom:none;}
+.edit-name-cell{min-width:140px;}
 
 .edit-field{background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:12px;padding:5px 7px;width:100%;-moz-appearance:textfield;}
 .edit-field::-webkit-inner-spin-button,.edit-field::-webkit-outer-spin-button{-webkit-appearance:none;}
@@ -265,6 +345,8 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 100px;}
   <div class="nav-tab active" onclick="switchView('log',this)">LOG</div>
   <div class="nav-tab" onclick="switchView('progress',this)">PROGRESS</div>
   <div class="nav-tab" onclick="switchView('history',this)">HISTORY</div>
+  <div class="nav-tab" onclick="switchView('nutrition',this)">NUTRITION</div>
+  <div class="nav-tab" onclick="switchView('body',this)">BODY</div>
   <div class="nav-tab" onclick="switchView('guide',this)">RPE GUIDE</div>
   <div class="nav-tab" id="editNavTab" onclick="switchView('edit',this)" style="display:none;">EDIT SESSIONS</div>
 </nav>
@@ -287,6 +369,14 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 100px;}
   <div class="view" id="view-history">
     <p class="slabel">ALL SESSIONS</p>
     <div id="historyList"></div>
+  </div>
+
+  <div class="view" id="view-nutrition">
+    <div id="nutritionContent"></div>
+  </div>
+
+  <div class="view" id="view-body">
+    <div id="bodyContent"></div>
   </div>
 
   <div class="view" id="view-edit">
@@ -381,7 +471,7 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 100px;}
     <div class="clock-label">Session Time</div>
     <div class="session-clock" id="sessionClock">00:00</div>
   </div>
-  <button class="btn btn-danger" onclick="finishSession()">FINISH &amp; SAVE</button>
+  <button class="btn btn-danger" onclick="showFinishModal()">FINISH &amp; SAVE</button>
 </div>
 
 <script>
@@ -405,11 +495,11 @@ const DEFAULT_SESSIONS = {
     name:'UPPER 2',sub:'Density / Conditioning',duration:'60–75 min',
     warmup:['Scapular push-ups ×10','Front delt press-up ×10','KB shoulder press 6kg ×6 each','Reverse hollow body hold – 20s','— ×2 rounds —'],
     exercises:[
-      {id:'u2_pu',      name:'Pull-Ups (Main)',         sets:5,defaultReps:'10',  hasWeight:false,superset:false,note:'Unbroken circuit → Dips → Press. Rest 1:30 after round.'},
-      {id:'u2_dips',    name:'Dips (Main)',              sets:5,defaultReps:'15',  hasWeight:true, defaultWeight:'10',superset:false},
-      {id:'u2_press',   name:'Military Press (Main)',    sets:5,defaultReps:'10',  hasWeight:true, defaultWeight:'40',superset:false},
-      {id:'u2_pu_sub',  name:'Pull-Ups (Sub)',           sets:3,defaultReps:'10',  hasWeight:false,superset:false,note:'Sub set – paired with tempo dips'},
-      {id:'u2_dips_sub',name:'Dips Tempo (Sub)',         sets:3,defaultReps:'5',   hasWeight:false,superset:false,note:'5s up / 5s down'},
+      {id:'u2_pu',      name:'Pull-Ups',        sets:5,defaultReps:'10',  hasWeight:true, defaultWeight:'10', superset:true, ssLabel:'B1',blockLabel:'BLOCK 1 — 5 ROUNDS',note:'Unbroken: Pull-Ups → Dips → Press with no rest. 1:30 rest after each full round.'},
+      {id:'u2_dips',    name:'Dips',            sets:5,defaultReps:'15',  hasWeight:true, defaultWeight:'10', superset:true, ssLabel:'B1'},
+      {id:'u2_press',   name:'Military Press',  sets:5,defaultReps:'10',  hasWeight:true, defaultWeight:'40', superset:true, ssLabel:'B1'},
+      {id:'u2_pu_sub',  name:'Pull-Ups',        sets:3,defaultReps:'10',  hasWeight:false,superset:true, ssLabel:'B2',blockLabel:'BLOCK 2 — 3 ROUNDS',note:'Paired with tempo dips. 1:30 rest after each round.'},
+      {id:'u2_dips_sub',name:'Dips (Tempo)',    sets:3,defaultReps:'5',   hasWeight:false,superset:true, ssLabel:'B2',note:'5s up / 5s down'},
     ]
   },
   upper3:{
@@ -556,6 +646,8 @@ function switchView(v,el){
   if(v==='progress'){progKey=Object.keys(SESSIONS)[0];renderProgress();}
   if(v==='history')renderHistory();
   if(v==='edit')renderEditView();
+  if(v==='nutrition')renderNutrition();
+  if(v==='body')renderBody();
 }
 
 // ── RENDER EDIT VIEW ──
@@ -570,23 +662,35 @@ function renderEditView(){
           <div class="edit-session-sub">${s.sub}</div>
         </div>
       </div>
-      <div class="edit-col-label">
-        <span>Exercise name</span><span>Sets</span><span>Reps</span><span>Def. weight</span><span>Weight?</span><span></span>
-      </div>`;
+      <table class="edit-table">
+        <thead>
+          <tr>
+            <th style="min-width:140px;">Exercise name</th>
+            <th style="width:58px;">Sets</th>
+            <th style="width:70px;">Reps</th>
+            <th style="width:80px;">Def. wt</th>
+            <th style="width:70px;">Weight?</th>
+            <th style="width:90px;"></th>
+          </tr>
+        </thead>
+        <tbody>`;
     s.exercises.forEach((ex,exIdx)=>{
-      html+=`<div class="edit-ex-row" id="editrow_${sKey}_${exIdx}">
-        <input class="edit-field name-field" type="text" value="${ex.name}" onchange="editExField('${sKey}',${exIdx},'name',this.value)" placeholder="Exercise name">
-        <input class="edit-field" type="number" value="${ex.sets}" min="1" max="20" onchange="editExField('${sKey}',${exIdx},'sets',parseInt(this.value)||1)" placeholder="Sets">
-        <input class="edit-field" type="text" value="${ex.defaultReps||''}" onchange="editExField('${sKey}',${exIdx},'defaultReps',this.value)" placeholder="Reps">
-        <input class="edit-field" type="text" value="${ex.defaultWeight||''}" ${!ex.hasWeight?'disabled style="opacity:0.25"':''} onchange="editExField('${sKey}',${exIdx},'defaultWeight',this.value)" placeholder="kg" id="wtfield_${sKey}_${exIdx}">
-        <div class="weight-toggle">
-          <button class="wt-opt${ex.hasWeight?'':' active'}" onclick="setHasWeight('${sKey}',${exIdx},false)">—</button>
-          <button class="wt-opt${ex.hasWeight?' active':''}" onclick="setHasWeight('${sKey}',${exIdx},true)">kg</button>
-        </div>
-        <button class="edit-del-btn" onclick="deleteExercise('${sKey}',${exIdx})">✕ Remove</button>
-      </div>`;
+      html+=`<tr id="editrow_${sKey}_${exIdx}">
+        <td class="edit-name-cell"><input class="edit-field name-field" type="text" value="${ex.name}" onchange="editExField('${sKey}',${exIdx},'name',this.value)" placeholder="Exercise name" style="width:100%;min-width:130px;"></td>
+        <td><input class="edit-field" type="number" value="${ex.sets}" min="1" max="20" onchange="editExField('${sKey}',${exIdx},'sets',parseInt(this.value)||1)" style="width:100%;text-align:center;"></td>
+        <td><input class="edit-field" type="text" value="${ex.defaultReps||''}" onchange="editExField('${sKey}',${exIdx},'defaultReps',this.value)" placeholder="e.g. 8" style="width:100%;text-align:center;"></td>
+        <td><input class="edit-field" type="text" value="${ex.defaultWeight||''}" ${!ex.hasWeight?'disabled style="opacity:0.25;width:100%;text-align:center;"':'style="width:100%;text-align:center;"'} onchange="editExField('${sKey}',${exIdx},'defaultWeight',this.value)" placeholder="kg" id="wtfield_${sKey}_${exIdx}"></td>
+        <td>
+          <div class="weight-toggle">
+            <button class="wt-opt${ex.hasWeight?'':' active'}" onclick="setHasWeight('${sKey}',${exIdx},false)">—</button>
+            <button class="wt-opt${ex.hasWeight?' active':''}" onclick="setHasWeight('${sKey}',${exIdx},true)">kg</button>
+          </div>
+        </td>
+        <td><button class="edit-del-btn" onclick="deleteExercise('${sKey}',${exIdx})" style="white-space:nowrap;">✕ Remove</button></td>
+      </tr>`;
     });
-    html+=`<div class="add-ex-row">
+    html+=`</tbody></table>
+    <div class="add-ex-row">
       <button class="add-ex-btn" onclick="addExercise('${sKey}')">+ Add exercise</button>
     </div></div>`;
   });
@@ -713,6 +817,9 @@ function loadSession(key){
       </tr>`;
     }
 
+    if(ex.blockLabel){
+      html+=`<div style="font-family:var(--font-display);font-size:13px;letter-spacing:3px;color:var(--ink3);margin:18px 0 6px;padding-left:2px;">${ex.blockLabel}</div>`;
+    }
     html+=`<div class="ex-card${ex.superset?' superset':''}" id="exc_${ex.id}">
       <div class="ex-head" onclick="toggleEx('${ex.id}')">
         <div class="ex-head-left">
@@ -919,8 +1026,20 @@ function startTimer(){
 // ═══════════════════════════════════════════════════
 // FINISH SESSION
 // ═══════════════════════════════════════════════════
-function finishSession(){
+function showFinishModal(){
   if(!startTime){alert('Tap START SESSION first');return;}
+  const dur=Math.floor((Date.now()-startTime)/1000);
+  const s=SESSIONS[activeKey];
+  const logged=s.exercises.reduce((a,ex)=>a+(logData[ex.id]||[]).filter(s=>s.done).length,0);
+  const total=s.exercises.reduce((a,ex)=>a+ex.sets,0);
+  document.getElementById('finishModalTitle').textContent=s.name;
+  document.getElementById('finishModalStats').textContent=`${Math.floor(dur/60)} min · ${logged} of ${total} sets logged`;
+  document.getElementById('finishModal').style.display='flex';
+}
+
+function finishSession(){
+  document.getElementById('finishModal').style.display='none';
+  if(!startTime){return;}
   const dur=Math.floor((Date.now()-startTime)/1000);
   clearInterval(timerInterval);
   const s=SESSIONS[activeKey];
@@ -934,7 +1053,6 @@ function finishSession(){
     }))
   };
   const h=getHistory();h.unshift(entry);saveHistory(h);
-  alert(`Saved! ${s.name} · ${Math.floor(dur/60)} min`);
   resetSession();
 }
 
@@ -1057,7 +1175,10 @@ function renderHistory(){
           <div class="h-stat"><strong>${mins}</strong>min</div>
           <div class="h-stat"><strong>${totalSets}</strong>sets</div>
         </div>
-        <button class="del-btn" onclick="event.stopPropagation();delEntry(${idx})">✕</button>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="del-btn" style="color:var(--ink3);border:1px solid var(--border);padding:3px 10px;" onclick="event.stopPropagation();openHistEdit(${idx})">EDIT</button>
+          <button class="del-btn" onclick="event.stopPropagation();delEntry(${idx})">✕</button>
+        </div>
       </div>
       <div class="history-body" id="hb${idx}">${rows||'<div style="color:var(--ink3);font-size:12px;padding:6px 0;">No sets logged.</div>'}</div>
     </div>`;
@@ -1066,6 +1187,449 @@ function renderHistory(){
 
 function toggleHist(id){document.getElementById(id).classList.toggle('open');}
 function delEntry(idx){if(!confirm('Delete?'))return;const h=getHistory();h.splice(idx,1);saveHistory(h);renderHistory();}
+
+function openHistEdit(idx){
+  const h=getHistory();
+  const entry=h[idx];
+  const modal=document.getElementById('histEditModal');
+  const content=document.getElementById('histEditContent');
+
+  let formHtml=`<div style="font-family:var(--font-display);font-size:28px;letter-spacing:2px;margin-bottom:4px;">${entry.sessionName}</div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-bottom:20px;">${fmtDay(entry.date)}</div>`;
+
+  entry.exercises.forEach((ex,ei)=>{
+    if(!ex.sets.length) return;
+    formHtml+=`<div style="margin-bottom:16px;">
+      <div style="font-family:var(--font-display);font-size:18px;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border);">${ex.name}</div>`;
+    ex.sets.forEach((s,si)=>{
+      formHtml+=`<div style="display:grid;grid-template-columns:30px 1fr 1fr 80px;gap:6px;align-items:center;margin-bottom:5px;">
+        <div style="font-family:var(--font-display);font-size:18px;color:var(--border2);">${si+1}</div>
+        <input class="edit-field" type="text" placeholder="Reps" value="${s.reps||''}" id="he_rep_${idx}_${ei}_${si}" style="padding:6px 8px;">
+        <input class="edit-field" type="number" placeholder="kg" value="${s.weight||''}" id="he_wt_${idx}_${ei}_${si}" step="0.5" style="padding:6px 8px;">
+        <select id="he_rpe_${idx}_${ei}_${si}" style="background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:12px;padding:6px 4px;">
+          <option value="">RPE</option>
+          ${[6,7,8,9,10].map(r=>`<option value="${r}"${s.rpe==r?' selected':''}>${r}</option>`).join('')}
+        </select>
+      </div>`;
+    });
+    formHtml+=`</div>`;
+  });
+
+  content.innerHTML=formHtml;
+  modal.dataset.editIdx=idx;
+  modal.style.display='flex';
+}
+
+function saveHistEdit(){
+  const modal=document.getElementById('histEditModal');
+  const idx=parseInt(modal.dataset.editIdx);
+  const h=getHistory();
+  const entry=h[idx];
+
+  entry.exercises.forEach((ex,ei)=>{
+    ex.sets.forEach((s,si)=>{
+      const repEl=document.getElementById(`he_rep_${idx}_${ei}_${si}`);
+      const wtEl=document.getElementById(`he_wt_${idx}_${ei}_${si}`);
+      const rpeEl=document.getElementById(`he_rpe_${idx}_${ei}_${si}`);
+      if(repEl) s.reps=repEl.value;
+      if(wtEl)  s.weight=wtEl.value;
+      if(rpeEl) s.rpe=rpeEl.value?parseInt(rpeEl.value):null;
+    });
+  });
+
+  saveHistory(h);
+  modal.style.display='none';
+  renderHistory();
+}
+
+
+// ═══════════════════════════════════════════════════
+// BODY METRICS
+// ═══════════════════════════════════════════════════
+function getBodyLog() { try { return JSON.parse(localStorage.getItem('foxfit_body_v1')||'[]'); } catch { return []; } }
+function saveBodyLog(d) { localStorage.setItem('foxfit_body_v1', JSON.stringify(d)); }
+
+let bodyChartMetric = 'weight'; // 'weight' | 'bf'
+
+function renderBody() {
+  const log = getBodyLog(); // [{date, weight, bf}] sorted newest first
+  const el = document.getElementById('bodyContent');
+
+  // Current / starting stats
+  const latest = log[0] || null;
+  const start  = log[log.length-1] || null;
+  const prev   = log[1] || null;
+
+  function delta(cur, ref, field, invert=false) {
+    if(!cur||!ref||cur===ref) return '';
+    const d = (parseFloat(cur[field]||0) - parseFloat(ref[field]||0));
+    if(isNaN(d)||d===0) return '';
+    const up = invert ? d<0 : d>0;
+    const sign = d>0?'+':'';
+    return `<div class="bsc-delta ${up?'up':'down'}">${sign}${d.toFixed(1)} vs prev</div>`;
+  }
+
+  // ── Stat cards ──
+  let statsHtml = `<div class="body-stat-row">
+    <div class="body-stat-card">
+      <div class="bsc-label">Weight</div>
+      <div class="bsc-val">${latest?parseFloat(latest.weight).toFixed(1):'—'}<span class="bsc-unit"> kg</span></div>
+      ${latest&&prev?delta(latest,prev,'weight',true):'<div class="bsc-delta neutral">No data yet</div>'}
+      ${start&&latest&&start!==latest?`<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-top:3px;">Start: ${parseFloat(start.weight).toFixed(1)}kg</div>`:''}
+    </div>
+    <div class="body-stat-card">
+      <div class="bsc-label">Body Fat</div>
+      <div class="bsc-val">${latest&&latest.bf?parseFloat(latest.bf).toFixed(1):'—'}<span class="bsc-unit"> %</span></div>
+      ${latest&&prev&&latest.bf&&prev.bf?delta(latest,prev,'bf',true):'<div class="bsc-delta neutral">Est. 10–12%</div>'}
+      ${start&&latest&&start!==latest&&start.bf&&latest.bf?`<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-top:3px;">Start: ${parseFloat(start.bf).toFixed(1)}%</div>`:''}
+    </div>
+  </div>`;
+
+  // ── Log form ──
+  const todayStr = new Date().toISOString().slice(0,10);
+  let logForm = `<div class="body-log-form">
+    <div style="font-family:var(--font-display);font-size:22px;letter-spacing:1px;margin-bottom:2px;">LOG MEASUREMENT</div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);letter-spacing:1px;">Both fields optional — log either or both</div>
+    <div class="body-form-row">
+      <div class="body-field-wrap">
+        <label class="body-field-label">Weight (kg)</label>
+        <input class="body-field" type="number" id="bfWeight" step="0.1" placeholder="81.5">
+      </div>
+      <div class="body-field-wrap">
+        <label class="body-field-label">Body Fat (%)</label>
+        <input class="body-field" type="number" id="bfBf" step="0.1" placeholder="11.0">
+      </div>
+      <div class="body-field-wrap body-submit">
+        <label class="body-field-label">Date</label>
+        <input class="body-field" type="date" id="bfDate" value="${todayStr}" style="font-size:13px;">
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <button class="body-submit" onclick="logBodyEntry()">SAVE ENTRY</button>
+    </div>
+  </div>`;
+
+  // ── Charts ──
+  let chartHtml = '';
+  if(log.length >= 2) {
+    const reversed = [...log].reverse(); // oldest first for chart
+    chartHtml = `<div class="body-chart-wrap">
+      <div class="body-chart-title">
+        TREND
+        <span class="body-chart-subtitle">${log.length} entries</span>
+      </div>
+      <div class="chart-toggle">
+        <button class="ct-btn${bodyChartMetric==='weight'?' active':''}" onclick="setBodyChart('weight')">WEIGHT</button>
+        <button class="ct-btn${bodyChartMetric==='bf'?' active':''}" onclick="setBodyChart('bf')">BODY FAT</button>
+      </div>
+      ${buildBodySparkline(reversed, bodyChartMetric)}
+    </div>`;
+  }
+
+  // ── Table ──
+  let tableHtml = '';
+  if(log.length) {
+    const rows = log.map((e,i) => {
+      const wDelta = i<log.length-1 && e.weight && log[i+1].weight
+        ? (parseFloat(e.weight)-parseFloat(log[i+1].weight)) : null;
+      const bDelta = i<log.length-1 && e.bf && log[i+1].bf
+        ? (parseFloat(e.bf)-parseFloat(log[i+1].bf)) : null;
+      const wDeltaHtml = wDelta!==null
+        ? `<td class="${wDelta<0?'delta-down':wDelta>0?'delta-up':''}">${wDelta>0?'+':''}${wDelta.toFixed(1)}</td>`
+        : '<td style="color:var(--ink3)">—</td>';
+      const bDeltaHtml = bDelta!==null
+        ? `<td class="${bDelta<0?'delta-down':bDelta>0?'delta-up':''}">${bDelta>0?'+':''}${bDelta.toFixed(1)}%</td>`
+        : '<td style="color:var(--ink3)">—</td>';
+      return `<tr>
+        <td>${new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}).toUpperCase()}</td>
+        <td>${e.weight?parseFloat(e.weight).toFixed(1)+' kg':'—'}</td>
+        ${wDeltaHtml}
+        <td>${e.bf?parseFloat(e.bf).toFixed(1)+'%':'—'}</td>
+        ${bDeltaHtml}
+        <td><button class="body-del-btn" onclick="deleteBodyEntry(${i})">✕</button></td>
+      </tr>`;
+    }).join('');
+
+    tableHtml = `<div style="overflow-x:auto;">
+      <table class="body-table">
+        <tr>
+          <th>Date</th><th>Weight</th><th>Δ Wt</th><th>Body Fat</th><th>Δ BF</th><th></th>
+        </tr>
+        ${rows}
+      </table>
+    </div>`;
+  } else {
+    tableHtml = `<div class="empty-state">No entries yet — log your first measurement above</div>`;
+  }
+
+  el.innerHTML = statsHtml + logForm + chartHtml +
+    `<div class="slabel" style="margin-top:20px;">HISTORY</div>` + tableHtml;
+}
+
+function buildBodySparkline(pts, metric) {
+  const vals = pts.map(p => parseFloat(p[metric]||0)).filter(v=>v>0);
+  if(vals.length < 2) return '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink3);">Not enough data to chart this metric yet.</div>';
+
+  const fullPts = pts.filter(p => parseFloat(p[metric]||0) > 0);
+  const W=340, H=80, pl=8, pr=8, pt=12, pb=22;
+  const minV = Math.min(...vals), maxV = Math.max(...vals), range = maxV-minV||0.5;
+  const xs = fullPts.map((_,i) => pl + (i/(fullPts.length-1))*(W-pl-pr));
+  const ys = fullPts.map(p => pt + (1-(parseFloat(p[metric])-minV)/range)*(H-pt-pb));
+
+  const line = xs.map((x,i) => `${i===0?'M':'L'}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ');
+  const area = line + ` L${xs[xs.length-1].toFixed(1)},${(H-pb).toFixed(1)} L${xs[0].toFixed(1)},${(H-pb).toFixed(1)} Z`;
+
+  // colour: green if trending down (weight/bf loss), orange if up
+  const trend = vals[vals.length-1] - vals[0];
+  const lineCol = trend <= 0 ? 'var(--lime)' : 'var(--orange)';
+  const areaCol = trend <= 0 ? 'rgba(143,190,0,0.08)' : 'rgba(232,93,0,0.08)';
+
+  let dots = '', labels = '';
+  fullPts.forEach((p,i) => {
+    const isFirst = i===0, isLast = i===fullPts.length-1;
+    dots += `<circle cx="${xs[i].toFixed(1)}" cy="${ys[i].toFixed(1)}" r="3" fill="${lineCol}" stroke="var(--surface)" stroke-width="1.5"/>`;
+    if(isFirst || isLast) {
+      const anchor = isFirst?'start':'end';
+      const v = parseFloat(p[metric]).toFixed(1);
+      const unit = metric==='weight'?'kg':'%';
+      labels += `<text x="${xs[i].toFixed(1)}" y="${(H-pb+14).toFixed(1)}" text-anchor="${anchor}" font-family="monospace" font-size="9" fill="var(--ink3)">${v}${unit}</text>`;
+      // date label
+      const dateStr = new Date(p.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}).toUpperCase();
+      labels += `<text x="${xs[i].toFixed(1)}" y="${(H-pb+24).toFixed(1)}" text-anchor="${anchor}" font-family="monospace" font-size="8" fill="var(--border2)">${dateStr}</text>`;
+    }
+  });
+
+  const unitLabel = metric==='weight'?'kg':'%';
+  return `<svg width="${W}" height="${H+8}" viewBox="0 0 ${W} ${H+8}" style="max-width:100%;overflow:visible;">
+    <path d="${area}" fill="${areaCol}"/>
+    <path d="${line}" fill="none" stroke="${lineCol}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}${labels}
+    <text x="${pl}" y="${pt-2}" font-family="monospace" font-size="8" fill="var(--border2)">${maxV.toFixed(1)}${unitLabel}</text>
+    <text x="${pl}" y="${H-pb}" font-family="monospace" font-size="8" fill="var(--border2)">${minV.toFixed(1)}${unitLabel}</text>
+  </svg>`;
+}
+
+function setBodyChart(metric) {
+  bodyChartMetric = metric;
+  renderBody();
+}
+
+function logBodyEntry() {
+  const weight = document.getElementById('bfWeight').value.trim();
+  const bf     = document.getElementById('bfBf').value.trim();
+  const date   = document.getElementById('bfDate').value;
+
+  if(!weight && !bf) { alert('Enter at least one value'); return; }
+  if(!date) { alert('Pick a date'); return; }
+
+  const log = getBodyLog();
+  // Replace if same date already exists
+  const existIdx = log.findIndex(e => e.date === date);
+  const entry = { date, weight: weight||null, bf: bf||null };
+  if(existIdx >= 0) {
+    if(!confirm('Entry for this date already exists. Replace it?')) return;
+    log[existIdx] = entry;
+  } else {
+    log.push(entry);
+  }
+  // Sort newest first
+  log.sort((a,b) => new Date(b.date)-new Date(a.date));
+  saveBodyLog(log);
+  renderBody();
+}
+
+function deleteBodyEntry(idx) {
+  if(!confirm('Delete this entry?')) return;
+  const log = getBodyLog();
+  log.splice(idx, 1);
+  saveBodyLog(log);
+  renderBody();
+}
+
+// ═══════════════════════════════════════════════════
+// NUTRITION DATA
+// ═══════════════════════════════════════════════════
+const MEAL_PLANS = {
+  // Mon–Thu: deficit
+  deficit: {
+    label: 'DEFICIT DAY', type: 'day-deficit',
+    targets: { kcal:2045, protein:185, carbs:170, fat:67 },
+    meals: [
+      { id:'bf',  name:'Breakfast',         detail:'Steak & Eggs',          kcal:338, protein:49, carbs:27, fat:4  },
+      { id:'lu',  name:'Lunch',             detail:'Chicken & Sugar Snaps', kcal:410, protein:56, carbs:9,  fat:16 },
+      { id:'sn',  name:'Daytime Snack',     detail:'',                      kcal:296, protein:8,  carbs:34, fat:14 },
+      { id:'di',  name:'Dinner',            detail:'Main Performance Meal', kcal:800, protein:70, carbs:75, fat:24 },
+      { id:'ev',  name:'Evening Snack',     detail:'Chocolate',             kcal:200, protein:3,  carbs:25, fat:10 },
+    ]
+  },
+  // Friday: moderate surplus
+  moderate: {
+    label: 'MODERATE SURPLUS', type: 'day-moderate',
+    targets: { kcal:2850, protein:190, carbs:280, fat:85 },
+    meals: [
+      { id:'bf',  name:'Breakfast',         detail:'Steak & Eggs',          kcal:338, protein:49, carbs:27, fat:4  },
+      { id:'lu',  name:'Lunch',             detail:'Chicken & Sugar Snaps', kcal:410, protein:56, carbs:9,  fat:16 },
+      { id:'sn',  name:'Daytime Snack',     detail:'',                      kcal:296, protein:8,  carbs:34, fat:14 },
+      { id:'di',  name:'Dinner',            detail:'Main Performance Meal', kcal:900, protein:75, carbs:100,fat:28 },
+      { id:'ex',  name:'Extra Meal',        detail:'Added on surplus day',  kcal:500, protein:30, carbs:60, fat:15 },
+      { id:'ev',  name:'Evening Snack',     detail:'Chocolate',             kcal:200, protein:3,  carbs:25, fat:10 },
+    ]
+  },
+  // Saturday: high surplus
+  surplus: {
+    label: 'HIGH SURPLUS DAY', type: 'day-surplus',
+    targets: { kcal:3500, protein:200, carbs:380, fat:110 },
+    meals: [
+      { id:'bf',  name:'Breakfast',         detail:'Steak & Eggs',          kcal:338, protein:49, carbs:27, fat:4  },
+      { id:'lu',  name:'Lunch',             detail:'Flexible',              kcal:700, protein:50, carbs:80, fat:25 },
+      { id:'sn',  name:'Snack',             detail:'',                      kcal:400, protein:15, carbs:55, fat:15 },
+      { id:'di',  name:'Dinner',            detail:'High carb main',        kcal:1000,protein:70, carbs:130,fat:30 },
+      { id:'ev',  name:'Evening',           detail:'Flexible',              kcal:600, protein:20, carbs:70, fat:20 },
+    ]
+  },
+  // Sunday: controlled
+  controlled: {
+    label: 'CONTROLLED DAY', type: 'day-controlled',
+    targets: { kcal:2500, protein:190, carbs:220, fat:75 },
+    meals: [
+      { id:'bf',  name:'Breakfast',         detail:'Steak & Eggs',          kcal:338, protein:49, carbs:27, fat:4  },
+      { id:'lu',  name:'Lunch',             detail:'Chicken & Sugar Snaps', kcal:410, protein:56, carbs:9,  fat:16 },
+      { id:'sn',  name:'Daytime Snack',     detail:'',                      kcal:296, protein:8,  carbs:34, fat:14 },
+      { id:'di',  name:'Dinner',            detail:'Main Performance Meal', kcal:900, protein:70, carbs:100,fat:28 },
+      { id:'ev',  name:'Evening Snack',     detail:'Chocolate',             kcal:200, protein:3,  carbs:25, fat:10 },
+    ]
+  }
+};
+
+function getDayPlan() {
+  const dow = new Date().getDay(); // 0=Sun,1=Mon,...6=Sat
+  if(dow === 0) return 'controlled';
+  if(dow === 5) return 'moderate';
+  if(dow === 6) return 'surplus';
+  return 'deficit'; // Mon–Thu
+}
+
+function getNutrLog(dateKey) {
+  try { return JSON.parse(localStorage.getItem('foxfit_nutr_'+dateKey)||'{}'); } catch { return {}; }
+}
+function saveNutrLog(dateKey, data) { localStorage.setItem('foxfit_nutr_'+dateKey, JSON.stringify(data)); }
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── RENDER NUTRITION ──
+function renderNutrition() {
+  const planKey = getDayPlan();
+  const plan = MEAL_PLANS[planKey];
+  const dateKey = todayKey();
+  const log = getNutrLog(dateKey);
+
+  // Calculate actuals from logged meals
+  let actuals = { kcal:0, protein:0, carbs:0, fat:0 };
+  plan.meals.forEach(m => {
+    if(log[m.id]) {
+      actuals.kcal    += m.kcal;
+      actuals.protein += m.protein;
+      actuals.carbs   += m.carbs;
+      actuals.fat     += m.fat;
+    }
+  });
+
+  const t = plan.targets;
+  const dow = new Date().toLocaleDateString('en-GB',{weekday:'long'}).toUpperCase();
+
+  // Macro ring cards
+  function macroCard(label, actual, target, unit='g') {
+    const pct = Math.min((actual/target)*100, 100);
+    const over = actual > target;
+    return `<div class="macro-ring-card">
+      <div class="macro-val" style="color:${over?'var(--orange)':'var(--ink)'}">${actual}</div>
+      <div class="macro-target">${target}${unit}</div>
+      <div class="macro-label">${label}</div>
+      <div class="macro-bar-wrap"><div class="macro-bar${over?' over':''}" style="width:${pct}%"></div></div>
+    </div>`;
+  }
+
+  let html = `
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+      <div style="font-family:var(--font-display);font-size:42px;letter-spacing:2px;line-height:1;">${dow}</div>
+      <span class="day-type-badge ${plan.type}">${plan.label}</span>
+    </div>
+
+    <div class="macro-ring-row">
+      ${macroCard('KCAL', actuals.kcal, t.kcal, '')}
+      ${macroCard('PROTEIN', actuals.protein, t.protein)}
+      ${macroCard('CARBS', actuals.carbs, t.carbs)}
+      ${macroCard('FAT', actuals.fat, t.fat)}
+    </div>
+
+    <div class="nutr-section-label">TODAY'S MEALS</div>`;
+
+  plan.meals.forEach(m => {
+    const done = !!log[m.id];
+    html += `<div class="meal-card${done?' logged':''}">
+      <button class="meal-log-btn${done?' logged':''}" onclick="toggleMeal('${m.id}','${planKey}','${dateKey}')" title="${done?'Unlog':'Log'}">
+        ${done ? '✓' : '+'}
+      </button>
+      <div class="meal-info">
+        <div class="meal-name">${m.name}</div>
+        ${m.detail?`<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-bottom:4px;">${m.detail}</div>`:''}
+        <div class="meal-macros">
+          <span>P ${m.protein}g</span>
+          <span>C ${m.carbs}g</span>
+          <span>F ${m.fat}g</span>
+        </div>
+      </div>
+      <div class="meal-kcal">${m.kcal}<span style="font-size:10px;color:var(--ink3);margin-left:2px;">kcal</span></div>
+    </div>`;
+  });
+
+  // Weekly distribution
+  html += `<div class="nutr-section-label" style="margin-top:24px;">WEEKLY STRUCTURE</div>
+    <div style="background:var(--surface);border:1px solid var(--border);padding:14px 16px;">`;
+
+  const weekDays = [
+    {label:'MON', kcal:2045, type:'deficit'},
+    {label:'TUE', kcal:2045, type:'deficit'},
+    {label:'WED', kcal:2045, type:'deficit'},
+    {label:'THU', kcal:2045, type:'deficit'},
+    {label:'FRI', kcal:2850, type:'moderate'},
+    {label:'SAT', kcal:3500, type:'surplus'},
+    {label:'SUN', kcal:2500, type:'controlled'},
+  ];
+  const maxKcal = 3500;
+  const todayDow = new Date().getDay();
+  const dowMap = {1:0,2:1,3:2,4:3,5:4,6:5,0:6};
+  const todayIdx = dowMap[todayDow];
+
+  weekDays.forEach((d,i) => {
+    const pct = (d.kcal/maxKcal)*100;
+    const isToday = i === todayIdx;
+    const barCol = d.type==='deficit'?'var(--lime)':d.type==='surplus'?'var(--orange)':d.type==='moderate'?'#d4a000':'var(--blue)';
+    html += `<div class="weekly-day-row">
+      <div class="wdr-day" style="${isToday?'color:var(--ink);font-weight:700;':''}">${d.label}${isToday?' ←':''}</div>
+      <div class="wdr-bar-wrap"><div class="wdr-bar" style="width:${pct}%;background:${barCol};"></div></div>
+      <div class="wdr-kcal">${d.kcal.toLocaleString()}</div>
+    </div>`;
+  });
+
+  html += `</div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-top:8px;letter-spacing:1px;">
+      Weekly avg ~2,430 kcal · ~167g protein/day
+    </div>`;
+
+  document.getElementById('nutritionContent').innerHTML = html;
+}
+
+function toggleMeal(mealId, planKey, dateKey) {
+  const log = getNutrLog(dateKey);
+  if(log[mealId]) { delete log[mealId]; }
+  else { log[mealId] = true; }
+  saveNutrLog(dateKey, log);
+  renderNutrition();
+}
 
 // ═══════════════════════════════════════════════════
 // INIT
@@ -1134,10 +1698,38 @@ self.addEventListener('fetch', e => {
 });
 `;
   if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    const blob = new Blob([swCode], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl, {scope:'/'}).catch(()=>{
+      // scope error on file:// is expected — app still works fully
+    });
   }
 })();
 </script>
+
+<!-- History Edit Modal -->
+<div id="histEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:flex-end;justify-content:center;padding-bottom:0;">
+  <div class="hist-edit-modal-inner">
+    <div id="histEditContent"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="saveHistEdit()" style="flex:1;background:var(--lime);color:var(--ink);border:none;padding:13px;font-family:var(--font-display);font-size:18px;letter-spacing:2px;cursor:pointer;">SAVE CHANGES</button>
+      <button onclick="document.getElementById('histEditModal').style.display='none'" style="background:transparent;color:var(--ink2);border:1px solid var(--border2);padding:13px 20px;font-family:var(--font-display);font-size:16px;letter-spacing:2px;cursor:pointer;">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- Finish Session Modal -->
+<div id="finishModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--surface);width:100%;max-width:420px;border-top:3px solid var(--lime);padding:28px 24px;">
+    <div style="font-family:var(--font-display);font-size:13px;letter-spacing:3px;color:var(--ink3);margin-bottom:4px;">SESSION COMPLETE</div>
+    <div style="font-family:var(--font-display);font-size:36px;letter-spacing:2px;margin-bottom:6px;" id="finishModalTitle"></div>
+    <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink3);margin-bottom:24px;letter-spacing:1px;" id="finishModalStats"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="finishSession()" style="background:var(--lime);color:var(--ink);border:none;padding:14px;font-family:var(--font-display);font-size:20px;letter-spacing:2px;cursor:pointer;">SAVE SESSION</button>
+      <button onclick="document.getElementById('finishModal').style.display='none'" style="background:transparent;color:var(--ink2);border:1px solid var(--border2);padding:12px;font-family:var(--font-display);font-size:16px;letter-spacing:2px;cursor:pointer;">KEEP GOING</button>
+    </div>
+  </div>
+</div>
 
 <!-- Install Modal -->
 <div id="installModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:flex-end;justify-content:center;">
