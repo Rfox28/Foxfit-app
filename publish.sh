@@ -5,7 +5,7 @@
 
 set -e
 
-REPO="foxfit-app"   # Change this if you named your GitHub repo differently
+REPO="foxfit"   # Change this if you named your GitHub repo differently
 BRANCH="gh-pages"
 
 echo ""
