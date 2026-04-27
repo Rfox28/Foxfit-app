@@ -305,6 +305,28 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
 /* EDIT MODE */
 .edit-banner{background:var(--ink);color:var(--lime);padding:8px 20px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:center;display:none;}
 .edit-banner.active{display:block;}
+/* ── CARDIO LOGGING MODAL ── */
+#cardioModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:410;align-items:flex-end;justify-content:center;}
+#cardioModal.open{display:flex;}
+.cardio-modal-inner{background:var(--surface);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-top:3px solid var(--blue);padding-bottom:env(safe-area-inset-bottom,0px);}
+.cardio-modal-head{padding:14px 18px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;}
+.cardio-modal-title{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--blue);}
+.cardio-section{padding:16px 18px;border-bottom:1px solid var(--border);}
+.cardio-section-title{font-family:var(--font-mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.cardio-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cardio-field-wrap{display:flex;flex-direction:column;gap:4px;}
+.cardio-field-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+.cardio-field{background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:16px;padding:9px 12px;width:100%;box-sizing:border-box;-moz-appearance:textfield;}
+.cardio-field::-webkit-inner-spin-button,.cardio-field::-webkit-outer-spin-button{-webkit-appearance:none;}
+.cardio-field:focus{outline:none;border-color:var(--blue);}
+.cardio-field-full{grid-column:1/-1;}
+.cardio-machine-btn{padding:8px 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:1px;border:1px solid var(--border);background:var(--surface2);color:var(--ink3);cursor:pointer;transition:all 0.12s;text-align:center;}
+.cardio-machine-btn.sel{background:var(--blue);color:#fff;border-color:var(--blue);}
+.cardio-type-row{display:flex;gap:0;margin-bottom:14px;}
+.cardio-type-btn{flex:1;padding:10px 6px;font-family:var(--font-display);font-size:13px;letter-spacing:1px;border:1px solid var(--border);border-right:none;background:var(--surface2);color:var(--ink3);cursor:pointer;transition:all 0.12s;text-align:center;line-height:1.2;}
+.cardio-type-btn:last-child{border-right:1px solid var(--border);}
+.cardio-type-btn.sel{background:var(--blue);color:#fff;border-color:var(--blue);}
+.cardio-type-btn .cardio-type-sub{font-family:var(--font-mono);font-size:8px;display:block;margin-top:2px;opacity:0.7;}
 /* ── AMRAP / EMOM BLOCKS ── */
 .block-card{border:1px solid var(--border);margin-bottom:12px;overflow:hidden;}
 .block-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
@@ -698,6 +720,20 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
     <div class="session-clock" id="sessionClock">00:00</div>
   </div>
   <button class="btn btn-danger" onclick="showFinishModal()">FINISH &amp; SAVE</button>
+</div>
+
+<!-- CARDIO LOGGING MODAL -->
+<div id="cardioModal" onclick="if(event.target===this)closeCardioModal()">
+  <div class="cardio-modal-inner">
+    <div class="cardio-modal-head">
+      <div class="cardio-modal-title" id="cardioModalTitle">LOG CARDIO</div>
+      <button onclick="closeCardioModal()" style="background:none;border:none;color:#888;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="cardioModalBody"></div>
+    <div style="padding:16px 18px;">
+      <button onclick="confirmCardioModal()" style="width:100%;background:var(--blue);color:#fff;border:none;padding:14px;font-family:var(--font-display);font-size:18px;letter-spacing:2px;cursor:pointer;">LOG SESSION</button>
+    </div>
+  </div>
 </div>
 
 <!-- INPUT MODAL — combined reps+weight entry -->
@@ -1254,6 +1290,310 @@ function fmtVal(val, inputType){
 }
 
 // ═══════════════════════════════════════════════════
+// CARDIO LOGGING MODAL
+// ═══════════════════════════════════════════════════
+
+// Cardio type definitions
+const CARDIO_TYPES = {
+  activity: {
+    label: 'ACTIVITY', sub: 'Tennis/Padel',
+    ids: ['c_padel','c_tenn','lib_padel','lib_tennis','lib_swim'],
+    fields: ['duration','notes']
+  },
+  liss: {
+    label: 'LISS', sub: 'Steady state',
+    fields: ['duration','machine','avgSpeed','avgWatts','distance','notes']
+  },
+  hiit: {
+    label: 'HIIT', sub: 'Intervals',
+    fields: ['duration','machine','rounds','workSecs','restSecs','topSpeed','avgSpeed','topWatts','avgWatts','notes']
+  },
+  sprints: {
+    label: 'SPRINTS', sub: 'Speed work',
+    fields: ['numSprints','sprintDistance','restBetween','topSpeed','avgTime','notes']
+  }
+};
+
+const CARDIO_MACHINES = ['Treadmill','Bike','Rower','Ski Erg','Assault Bike','Run (outdoor)','Swim'];
+
+let _cardioExId=null, _cardioSetIdx=null, _cardioType='liss', _cardioMachine='';
+
+function isCardioExercise(exId){
+  const cardioIds=['c_liss','c_hiit','c_padel','c_tenn','lib_liss','lib_hiit','lib_rowing','lib_cycling','lib_padel','lib_tennis','lib_swim'];
+  if(cardioIds.includes(exId))return true;
+  const ex=SESSIONS[activeKey]&&SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  return ex&&(ex.inputType==='minutes'||getMuscleGroup(exId).startsWith('Cardio'));
+}
+
+function getDefaultCardioType(exId){
+  if(['c_padel','c_tenn','lib_padel','lib_tennis','lib_swim'].includes(exId))return 'activity';
+  if(['c_hiit','lib_hiit'].includes(exId))return 'hiit';
+  if(['lib_rowing','lib_cycling'].includes(exId))return 'liss';
+  return 'liss';
+}
+
+function openCardioModal(exId, setIdx){
+  _cardioExId=exId; _cardioSetIdx=setIdx;
+  _cardioType=getDefaultCardioType(exId);
+  const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  const existing=logData[exId]&&logData[exId][setIdx];
+  if(existing&&existing.cardioData){
+    _cardioType=existing.cardioData.type||_cardioType;
+    _cardioMachine=existing.cardioData.machine||'';
+  }
+  document.getElementById('cardioModalTitle').textContent=`LOG · ${ex?ex.name:'CARDIO'}`;
+  renderCardioModalBody(existing&&existing.cardioData);
+  document.getElementById('cardioModal').classList.add('open');
+}
+
+function closeCardioModal(){
+  document.getElementById('cardioModal').classList.remove('open');
+  _cardioExId=null; _cardioSetIdx=null;
+}
+
+function setCardioType(type){
+  _cardioType=type;
+  const existing=logData[_cardioExId]&&logData[_cardioExId][_cardioSetIdx];
+  renderCardioModalBody(existing&&existing.cardioData);
+}
+
+function setCardioMachine(machine){
+  _cardioMachine=machine;
+  document.querySelectorAll('.cardio-machine-btn').forEach(b=>b.classList.toggle('sel',b.dataset.machine===machine));
+}
+
+function renderCardioModalBody(existing){
+  const t=_cardioType;
+  const e=existing||{};
+
+  const typeSelector=`<div class="cardio-section">
+    <div class="cardio-section-title">TYPE</div>
+    <div class="cardio-type-row">
+      ${Object.entries(CARDIO_TYPES).map(([k,v])=>`
+        <button class="cardio-type-btn${t===k?' sel':''}" onclick="setCardioType('${k}')">
+          ${v.label}<span class="cardio-type-sub">${v.sub}</span>
+        </button>`).join('')}
+    </div>
+  </div>`;
+
+  let fieldsHtml='';
+
+  // DURATION — always shown
+  fieldsHtml+=`<div class="cardio-section">
+    <div class="cardio-section-title">DURATION</div>
+    <div class="cardio-field-grid">
+      <div class="cardio-field-wrap cardio-field-full">
+        <div class="cardio-field-label">Minutes</div>
+        <input class="cardio-field" type="number" id="cd_duration" value="${e.duration||''}" placeholder="e.g. 40" style="font-size:28px;text-align:center;">
+      </div>
+    </div>
+  </div>`;
+
+  if(t==='activity'){
+    fieldsHtml+=`<div class="cardio-section">
+      <div class="cardio-section-title">NOTES (optional)</div>
+      <textarea id="cd_notes" class="cardio-field" rows="3" placeholder="Score, opponent, how it felt..." style="resize:none;">${e.notes||''}</textarea>
+    </div>`;
+  }
+
+  if(t==='liss'){
+    // Machine selector
+    fieldsHtml+=`<div class="cardio-section">
+      <div class="cardio-section-title">MACHINE / MODALITY</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;">
+        ${CARDIO_MACHINES.map(m=>`<button class="cardio-machine-btn${(_cardioMachine||e.machine)===m?' sel':''}" data-machine="${m}" onclick="setCardioMachine('${m}')">${m}</button>`).join('')}
+      </div>
+    </div>
+    <div class="cardio-section">
+      <div class="cardio-section-title">PERFORMANCE (all optional)</div>
+      <div class="cardio-field-grid">
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Avg Speed (km/h)</div>
+          <input class="cardio-field" type="number" id="cd_avgSpeed" step="0.1" value="${e.avgSpeed||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Avg Watts</div>
+          <input class="cardio-field" type="number" id="cd_avgWatts" value="${e.avgWatts||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Distance (km)</div>
+          <input class="cardio-field" type="number" id="cd_distance" step="0.01" value="${e.distance||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Calories</div>
+          <input class="cardio-field" type="number" id="cd_calories" value="${e.calories||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap cardio-field-full">
+          <div class="cardio-field-label">Notes</div>
+          <textarea id="cd_notes" class="cardio-field" rows="2" placeholder="How it felt, zone, conditions..." style="resize:none;">${e.notes||''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(t==='hiit'){
+    fieldsHtml+=`<div class="cardio-section">
+      <div class="cardio-section-title">MACHINE / MODALITY</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${CARDIO_MACHINES.map(m=>`<button class="cardio-machine-btn${(_cardioMachine||e.machine)===m?' sel':''}" data-machine="${m}" onclick="setCardioMachine('${m}')">${m}</button>`).join('')}
+      </div>
+    </div>
+    <div class="cardio-section">
+      <div class="cardio-section-title">STRUCTURE</div>
+      <div class="cardio-field-grid">
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Rounds / Sets</div>
+          <input class="cardio-field" type="number" id="cd_rounds" value="${e.rounds||''}" placeholder="e.g. 8">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Work (secs)</div>
+          <input class="cardio-field" type="number" id="cd_workSecs" value="${e.workSecs||''}" placeholder="e.g. 20">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Rest (secs)</div>
+          <input class="cardio-field" type="number" id="cd_restSecs" value="${e.restSecs||''}" placeholder="e.g. 40">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Distance (km)</div>
+          <input class="cardio-field" type="number" id="cd_distance" step="0.01" value="${e.distance||''}" placeholder="—">
+        </div>
+      </div>
+    </div>
+    <div class="cardio-section">
+      <div class="cardio-section-title">PERFORMANCE</div>
+      <div class="cardio-field-grid">
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Top Speed (km/h)</div>
+          <input class="cardio-field" type="number" id="cd_topSpeed" step="0.1" value="${e.topSpeed||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Avg Speed (km/h)</div>
+          <input class="cardio-field" type="number" id="cd_avgSpeed" step="0.1" value="${e.avgSpeed||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Top Watts</div>
+          <input class="cardio-field" type="number" id="cd_topWatts" value="${e.topWatts||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Avg Watts</div>
+          <input class="cardio-field" type="number" id="cd_avgWatts" value="${e.avgWatts||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Calories</div>
+          <input class="cardio-field" type="number" id="cd_calories" value="${e.calories||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap cardio-field-full">
+          <div class="cardio-field-label">Notes</div>
+          <textarea id="cd_notes" class="cardio-field" rows="2" placeholder="How it felt, protocol..." style="resize:none;">${e.notes||''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(t==='sprints'){
+    fieldsHtml+=`<div class="cardio-section">
+      <div class="cardio-section-title">SPRINT STRUCTURE</div>
+      <div class="cardio-field-grid">
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Number of Sprints</div>
+          <input class="cardio-field" type="number" id="cd_numSprints" value="${e.numSprints||''}" placeholder="e.g. 8">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Distance (m)</div>
+          <input class="cardio-field" type="number" id="cd_sprintDistance" value="${e.sprintDistance||''}" placeholder="e.g. 100">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Rest Between (secs)</div>
+          <input class="cardio-field" type="number" id="cd_restBetween" value="${e.restBetween||''}" placeholder="e.g. 60">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Avg Time / Sprint</div>
+          <input class="cardio-field" type="text" id="cd_avgTime" value="${e.avgTime||''}" placeholder="e.g. 13.2s">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Top Speed (km/h)</div>
+          <input class="cardio-field" type="number" id="cd_topSpeed" step="0.1" value="${e.topSpeed||''}" placeholder="—">
+        </div>
+        <div class="cardio-field-wrap">
+          <div class="cardio-field-label">Surface</div>
+          <input class="cardio-field" type="text" id="cd_surface" value="${e.surface||''}" placeholder="Track/Grass/Treadmill">
+        </div>
+        <div class="cardio-field-wrap cardio-field-full">
+          <div class="cardio-field-label">Notes</div>
+          <textarea id="cd_notes" class="cardio-field" rows="2" placeholder="How it felt, conditions..." style="resize:none;">${e.notes||''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('cardioModalBody').innerHTML=typeSelector+fieldsHtml;
+}
+
+function getCardioField(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+
+function confirmCardioModal(){
+  const duration=getCardioField('cd_duration');
+  if(!duration){alert('Enter duration in minutes');return;}
+
+  const cardioData={type:_cardioType, duration:parseFloat(duration), machine:_cardioMachine||''};
+
+  if(_cardioType==='liss'||_cardioType==='hiit'){
+    cardioData.avgSpeed=getCardioField('cd_avgSpeed');
+    cardioData.avgWatts=getCardioField('cd_avgWatts');
+    cardioData.distance=getCardioField('cd_distance');
+    cardioData.calories=getCardioField('cd_calories');
+    cardioData.notes=getCardioField('cd_notes');
+    if(_cardioType==='hiit'){
+      cardioData.rounds=getCardioField('cd_rounds');
+      cardioData.workSecs=getCardioField('cd_workSecs');
+      cardioData.restSecs=getCardioField('cd_restSecs');
+      cardioData.topSpeed=getCardioField('cd_topSpeed');
+      cardioData.topWatts=getCardioField('cd_topWatts');
+    }
+  } else if(_cardioType==='sprints'){
+    cardioData.numSprints=getCardioField('cd_numSprints');
+    cardioData.sprintDistance=getCardioField('cd_sprintDistance');
+    cardioData.restBetween=getCardioField('cd_restBetween');
+    cardioData.avgTime=getCardioField('cd_avgTime');
+    cardioData.topSpeed=getCardioField('cd_topSpeed');
+    cardioData.surface=getCardioField('cd_surface');
+    cardioData.notes=getCardioField('cd_notes');
+  } else {
+    cardioData.notes=getCardioField('cd_notes');
+  }
+
+  const exId=_cardioExId, setIdx=_cardioSetIdx;
+  logData[exId][setIdx]={...logData[exId][setIdx], reps:duration, cardioData, done:true};
+
+  // Update display
+  const repEl=document.getElementById(`repval_${exId}_${setIdx}`);
+  if(repEl){repEl.textContent=duration;repEl.style.color='var(--ink)';}
+
+  // Build summary for display
+  let summary=duration+' min';
+  if(cardioData.machine)summary+=' · '+cardioData.machine;
+  if(cardioData.rounds)summary+=' · '+cardioData.rounds+' rounds';
+  if(cardioData.topSpeed)summary+=' · top '+cardioData.topSpeed+'km/h';
+  if(cardioData.avgWatts)summary+=' · avg '+cardioData.avgWatts+'w';
+
+  const lb=document.getElementById(`lb_${exId}_${setIdx}`);
+  if(lb){lb.textContent='✓';lb.classList.add('logged');}
+  document.getElementById(`sr_${exId}_${setIdx}`).classList.add('done');
+
+  // Show summary below
+  const sugEl=document.getElementById(`sug_${exId}`);
+  if(sugEl){
+    sugEl.innerHTML=`<div class="suggestion-card hold">
+      <div class="sug-label">CARDIO LOGGED</div>
+      <div class="sug-text">${summary}</div>
+      ${cardioData.notes?`<div class="sug-detail">${cardioData.notes}</div>`:''}
+    </div>`;
+  }
+
+  closeCardioModal();
+}
+
+// ═══════════════════════════════════════════════════
 // INPUT MODAL — combined reps + weight entry
 // ═══════════════════════════════════════════════════
 let inputModalCb=null, inputModalType='reps', inputModalHasWt=true, inputModalWtType='kg';
@@ -1261,6 +1601,11 @@ let imCurrentFocus='rep';
 let imExId=null, imSetIdx=null;
 
 function openSetModal(exId, setIdx){
+  // Route cardio exercises to dedicated cardio modal
+  if(isCardioExercise(exId)){
+    openCardioModal(exId, setIdx);
+    return;
+  }
   imExId=exId; imSetIdx=setIdx;
   const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
   const iType=ex.inputType||'reps';
@@ -2805,6 +3150,25 @@ function renderHistory(){
     const rows=entry.exercises.filter(e=>e.sets.length).map(e=>{
       const iType=e.inputType||'reps';
       const str=e.sets.map((s,i)=>{
+        if(s.cardioData){
+          const cd=s.cardioData;
+          const parts=[cd.duration+'min'];
+          if(cd.machine)parts.push(cd.machine);
+          if(cd.type==='hiit'||cd.type==='sprints'){
+            if(cd.rounds)parts.push(cd.rounds+' rounds');
+            if(cd.topSpeed)parts.push('top '+cd.topSpeed+'km/h');
+            if(cd.topWatts)parts.push('top '+cd.topWatts+'w');
+          }
+          if(cd.type==='liss'){
+            if(cd.avgSpeed)parts.push('avg '+cd.avgSpeed+'km/h');
+            if(cd.avgWatts)parts.push('avg '+cd.avgWatts+'w');
+            if(cd.distance)parts.push(cd.distance+'km');
+          }
+          if(cd.type==='sprints'){
+            if(cd.numSprints)parts.push(cd.numSprints+'×'+cd.sprintDistance+'m');
+          }
+          return parts.join(' · ');
+        }
         const p=[`S${i+1}`];
         if(s.reps) p.push(fmtVal(s.reps,iType));
         if(s.weight) p.push(e.weightType==='seconds'?fmtVal(s.weight,'seconds'):s.weight+'kg');
@@ -2867,9 +3231,9 @@ function renderWeeklyAnalysis(h){
     entry.exercises.forEach(ex=>{
       const muscle=getMuscleGroup(ex.id);
       if(muscle.startsWith('Cardio')){
-        // Track cardio by subtype in minutes
         const sub=muscle.includes('·')?muscle.split('·')[1].trim():'General';
-        const mins=ex.sets.reduce((a,s)=>a+(parseFloat(s.reps)||0),0);
+        // Use cardioData duration if available, else reps field
+        const mins=ex.sets.reduce((a,s)=>a+(s.cardioData?parseFloat(s.cardioData.duration)||0:parseFloat(s.reps)||0),0);
         cardioMins[sub]=(cardioMins[sub]||0)+mins;
         totalCardioMins+=mins;
       } else {
