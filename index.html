@@ -324,6 +324,8 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
 .edit-del-btn:hover{border-color:var(--red);color:var(--red);}
 .add-ex-row{padding:10px 18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .add-ex-btn{background:none;border:1px dashed var(--border2);color:var(--ink3);font-family:var(--font-mono);font-size:11px;padding:7px 16px;cursor:pointer;letter-spacing:1px;transition:all 0.15s;}
+.reorder-btn{background:none;border:1px solid var(--border);color:var(--ink3);font-family:var(--font-mono);font-size:13px;padding:4px 8px;cursor:pointer;transition:all 0.12s;}
+.reorder-btn:hover{border-color:var(--ink);color:var(--ink);}
 .add-ex-btn:hover{border-color:var(--lime);color:var(--lime);}
 .weight-toggle{display:flex;gap:0;}
 .wt-opt{padding:5px 8px;font-family:var(--font-mono);font-size:10px;border:1px solid var(--border);background:var(--surface2);color:var(--ink3);cursor:pointer;transition:all 0.12s;}
@@ -385,21 +387,50 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
 .note-add-form textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:13px;padding:10px;resize:none;min-height:80px;margin-bottom:10px;}
 .note-add-form textarea:focus{outline:none;border-color:var(--ink3);}
 
-/* INPUT MODAL — for bigger reps/kg entry */
-#inputModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;align-items:flex-end;justify-content:center;}
+/* INPUT MODAL — combined reps+kg entry */
+#inputModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;align-items:flex-end;justify-content:center;}
 #inputModal.open{display:flex;}
-.input-modal-inner{background:var(--ink);width:100%;max-width:480px;padding:24px 24px calc(24px + env(safe-area-inset-bottom,0px));border-top:3px solid var(--lime);}
-.input-modal-label{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:#888;margin-bottom:8px;}
-.input-modal-title{font-family:var(--font-display);font-size:32px;letter-spacing:2px;color:var(--lime);margin-bottom:20px;}
-.input-modal-field{width:100%;background:#242220;border:1px solid #444;color:#fff;font-family:var(--font-display);font-size:48px;letter-spacing:2px;padding:16px 20px;text-align:center;-moz-appearance:textfield;}
+.input-modal-inner{background:var(--ink);width:100%;max-width:480px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:3px solid var(--lime);}
+.input-modal-label{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:#888;margin-bottom:6px;}
+.input-modal-title{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--lime);margin-bottom:14px;}
+/* Rep type toggle */
+.imt-row{display:flex;gap:0;margin-bottom:14px;}
+.imt-btn{flex:1;padding:9px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;border:1px solid #444;background:#242220;color:#888;cursor:pointer;transition:all 0.12s;text-align:center;}
+.imt-btn:first-child{border-right:none;}
+.imt-btn.active{background:var(--lime);color:var(--ink);border-color:var(--lime);}
+/* Quick rep buttons */
+.rep-quick-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.rep-quick-btn{flex:1;min-width:44px;padding:10px 4px;font-family:var(--font-display);font-size:20px;letter-spacing:1px;border:1px solid #444;background:#242220;color:#888;cursor:pointer;text-align:center;transition:all 0.12s;}
+.rep-quick-btn:active,.rep-quick-btn.sel{background:var(--lime);color:var(--ink);border-color:var(--lime);}
+/* Two fields side by side */
+.input-modal-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.input-modal-field-wrap{display:flex;flex-direction:column;gap:4px;}
+.input-modal-field-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:#888;}
+.input-modal-field{width:100%;background:#242220;border:1px solid #444;color:#fff;font-family:var(--font-display);font-size:40px;letter-spacing:1px;padding:12px 8px;text-align:center;-moz-appearance:textfield;box-sizing:border-box;}
 .input-modal-field::-webkit-inner-spin-button,.input-modal-field::-webkit-outer-spin-button{-webkit-appearance:none;}
 .input-modal-field:focus{outline:none;border-color:var(--lime);}
-.input-modal-type-row{display:flex;gap:8px;margin-bottom:16px;}
-.imt-btn{flex:1;padding:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:2px;border:1px solid #444;background:#242220;color:#888;cursor:pointer;transition:all 0.12s;text-align:center;}
-.imt-btn.active{background:var(--lime);color:var(--ink);border-color:var(--lime);}
-.input-modal-actions{display:flex;gap:10px;margin-top:16px;}
+.input-modal-field.active-field{border-color:var(--lime);}
+.input-modal-actions{display:flex;gap:10px;margin-top:4px;}
+/* Roller — custom scroll picker */
+.roller-wrap{position:relative;height:120px;overflow:hidden;background:#242220;border:1px solid #444;cursor:ns-resize;user-select:none;}
+.roller-inner{transition:transform 0.15s;}
+.roller-item{height:40px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:28px;letter-spacing:1px;color:#888;}
+.roller-item.center{color:#fff;font-size:34px;}
+.roller-item.sel{color:var(--lime);}
+.roller-highlight{position:absolute;top:50%;left:0;right:0;height:40px;transform:translateY(-50%);border-top:1px solid #444;border-bottom:1px solid #444;pointer-events:none;}
 
 @keyframes pinShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-12px);}40%{transform:translateX(12px);}60%{transform:translateX(-8px);}80%{transform:translateX(8px);}}
+
+/* HISTORY FILTERS */
+.hist-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.hist-filter-btn{padding:6px 14px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;border:1px solid var(--border);background:var(--surface2);color:var(--ink3);cursor:pointer;transition:all 0.12s;}
+.hist-filter-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.hist-period-card{background:var(--surface);border:1px solid var(--border);margin-bottom:8px;}
+.hist-period-head{padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.hist-period-title{font-family:var(--font-display);font-size:20px;letter-spacing:1px;}
+.hist-period-stats{font-family:var(--font-mono);font-size:10px;color:var(--ink3);}
+.hist-period-body{display:none;border-top:1px solid var(--border);padding:12px 16px;}
+.hist-period-body.open{display:block;}
 
 /* PROGRAMME */
 .prog-week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px;}
@@ -571,16 +602,43 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
   <button class="btn btn-danger" onclick="showFinishModal()">FINISH &amp; SAVE</button>
 </div>
 
-<!-- INPUT MODAL — large number entry, no zoom -->
+<!-- INPUT MODAL — combined reps+weight entry -->
 <div id="inputModal" onclick="if(event.target===this)closeInputModal()">
   <div class="input-modal-inner">
     <div class="input-modal-label" id="inputModalLabel">SET 1</div>
-    <div class="input-modal-title" id="inputModalTitle">REPS</div>
-    <div class="input-modal-type-row" id="inputModalTypeRow"></div>
-    <input class="input-modal-field" id="inputModalField" type="text" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" autocomplete="off">
+    <div class="input-modal-title" id="inputModalTitle">LOG SET</div>
+
+    <!-- Reps type toggle: REPS / SECONDS -->
+    <div class="imt-row">
+      <button class="imt-btn active" id="imtReps" onclick="imSetRepType('reps')">REPS</button>
+      <button class="imt-btn" id="imtSecs" onclick="imSetRepType('seconds')">SECONDS</button>
+    </div>
+
+    <!-- Quick rep buttons -->
+    <div class="rep-quick-row" id="repQuickRow">
+      <button class="rep-quick-btn" onclick="imQuickRep(6)">6</button>
+      <button class="rep-quick-btn" onclick="imQuickRep(8)">8</button>
+      <button class="rep-quick-btn" onclick="imQuickRep(10)">10</button>
+      <button class="rep-quick-btn" onclick="imQuickRep(12)">12</button>
+      <button class="rep-quick-btn" onclick="imQuickRep(15)">15</button>
+      <button class="rep-quick-btn" onclick="imQuickRep(20)">20</button>
+    </div>
+
+    <!-- Two fields: reps + weight -->
+    <div class="input-modal-fields">
+      <div class="input-modal-field-wrap">
+        <div class="input-modal-field-label" id="imRepLabel">REPS</div>
+        <input class="input-modal-field active-field" id="imRepField" type="text" inputmode="decimal" autocomplete="off" placeholder="0" onfocus="imFocus('rep')">
+      </div>
+      <div class="input-modal-field-wrap" id="imWtWrap">
+        <div class="input-modal-field-label" id="imWtLabel">KG</div>
+        <input class="input-modal-field" id="imWtField" type="text" inputmode="decimal" autocomplete="off" placeholder="—" onfocus="imFocus('wt')">
+      </div>
+    </div>
+
     <div class="input-modal-actions">
       <button onclick="closeInputModal()" style="flex:1;background:#242220;border:1px solid #444;color:#888;font-family:var(--font-display);font-size:18px;letter-spacing:2px;padding:14px;cursor:pointer;">CANCEL</button>
-      <button onclick="confirmInputModal()" style="flex:2;background:var(--lime);border:none;color:var(--ink);font-family:var(--font-display);font-size:20px;letter-spacing:2px;padding:14px;cursor:pointer;">CONFIRM</button>
+      <button onclick="confirmInputModal()" style="flex:2;background:var(--lime);border:none;color:var(--ink);font-family:var(--font-display);font-size:20px;letter-spacing:2px;padding:14px;cursor:pointer;">LOG SET</button>
     </div>
   </div>
 </div>
@@ -682,6 +740,183 @@ const MUSCLE_MAP = {
 // ═══════════════════════════════════════════════════
 // DEFAULT SESSIONS
 // ═══════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════
+// EXERCISE LIBRARY — master pool, programme engine draws from here
+// Categories: pillar, bodypart, function, type (strength/dynamic/functional)
+// type: 'strength' | 'dynamic' | 'functional' | 'skill' | 'prehab' | 'cardio'
+// ═══════════════════════════════════════════════════
+const EXERCISE_LIBRARY = [
+  // ── PUSH — HORIZONTAL ──────────────────────────────────────────────────
+  {id:'lib_bench_bar',       name:'Barbell Bench Press',         pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'6',  restSeconds:120},
+  {id:'lib_bench_db',        name:'Dumbbell Bench Press',        pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_incline_bar',     name:'Incline Barbell Press',       pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:4,defaultReps:'8',  restSeconds:120},
+  {id:'lib_incline_db',      name:'Incline Dumbbell Press',      pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_dips_bw',         name:'Dips (Bodyweight)',           pillar:'press', bodypart:'Chest/Triceps',  type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_dips_wt',         name:'Weighted Dips',               pillar:'press', bodypart:'Chest/Triceps',  type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'8',  restSeconds:120},
+  {id:'lib_dips_ring',       name:'Ring Dips',                   pillar:'press', bodypart:'Chest/Triceps',  type:'strength',    stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'8',  restSeconds:90},
+  {id:'lib_pushup_bw',       name:'Push-Ups',                    pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_pushup_ring',     name:'Ring Push-Ups',               pillar:'press', bodypart:'Chest',          type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_pushup_archer',   name:'Archer Push-Ups',             pillar:'press', bodypart:'Chest',          type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:false, sets:3,defaultReps:'6ea',restSeconds:90},
+  {id:'lib_pushup_tempo',    name:'Tempo Push-Ups (5s/5s)',      pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'5',  restSeconds:60,  note:'5s down / 5s up'},
+  {id:'lib_pushup_explosive',name:'Explosive Push-Ups',          pillar:'press', bodypart:'Chest',          type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'5',  restSeconds:90},
+  {id:'lib_pushup_feet_elev',name:'Feet Elevated Push-Ups',      pillar:'press', bodypart:'Chest/Shoulders',type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_cable_fly',       name:'Cable Chest Fly',             pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_pec_deck',        name:'Pec Deck',                    pillar:'press', bodypart:'Chest',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  // ── PUSH — VERTICAL ────────────────────────────────────────────────────
+  {id:'lib_mil_press',       name:'Military Press',              pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'8',  restSeconds:120},
+  {id:'lib_ohp_db',          name:'Dumbbell Overhead Press',     pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_arnold_press',    name:'Arnold Press',                pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_landmine_press',  name:'Landmine Press',              pillar:'press', bodypart:'Shoulders',      type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8',  restSeconds:90},
+  {id:'lib_pike_press',      name:'Pike Press',                  pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:5,defaultReps:'5',  restSeconds:90},
+  {id:'lib_hspu_wall',       name:'Wall Handstand Push-Up',      pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'handstand', skillLevel:5},
+  {id:'lib_hspu_free',       name:'Freestanding HSPU',           pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'handstand', skillLevel:6},
+  {id:'lib_lateral_raise',   name:'Lateral Raise',               pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_front_raise',     name:'Front Raise',                 pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_cable_lat_raise', name:'Cable Lateral Raise',         pillar:'press', bodypart:'Shoulders',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_tricep_pushdown', name:'Tricep Pushdown',             pillar:'press', bodypart:'Triceps',        type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_tricep_oh_ext',   name:'Overhead Tricep Extension',   pillar:'press', bodypart:'Triceps',        type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_skullcrusher',    name:'Skull Crushers',              pillar:'press', bodypart:'Triceps',        type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_close_grip_bench',name:'Close Grip Bench Press',      pillar:'press', bodypart:'Triceps',        type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  // ── PULL — VERTICAL ────────────────────────────────────────────────────
+  {id:'lib_pullup_bw',       name:'Pull-Ups',                    pillar:'pull',  bodypart:'Back/Biceps',    type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:5,defaultReps:'10', restSeconds:90},
+  {id:'lib_pullup_wt',       name:'Weighted Pull-Ups',           pillar:'pull',  bodypart:'Back/Biceps',    type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'6',  restSeconds:120, defaultWeight:'20'},
+  {id:'lib_pullup_explosive',name:'Explosive Pull-Ups',          pillar:'pull',  bodypart:'Back/Biceps',    type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120},
+  {id:'lib_pullup_ring',     name:'Ring Pull-Ups',               pillar:'pull',  bodypart:'Back/Biceps',    type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'8',  restSeconds:90},
+  {id:'lib_chinup',          name:'Chin-Ups',                    pillar:'pull',  bodypart:'Back/Biceps',    type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_lat_pulldown',    name:'Lat Pulldown',                pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_muscle_up',       name:'Muscle Up',                   pillar:'pull',  bodypart:'Back/Chest',     type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'front_lever', skillLevel:5},
+  {id:'lib_ring_muscle_up',  name:'Ring Muscle Up',              pillar:'pull',  bodypart:'Back/Chest',     type:'skill',       stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120},
+  {id:'lib_front_lever_tuck',name:'Tuck Front Lever',            pillar:'pull',  bodypart:'Back',           type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:120, skillTrack:'front_lever', skillLevel:2},
+  {id:'lib_front_lever_adv', name:'Advanced Tuck Front Lever',   pillar:'pull',  bodypart:'Back',           type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:120, skillTrack:'front_lever', skillLevel:3},
+  {id:'lib_front_lever_full',name:'Full Front Lever',            pillar:'pull',  bodypart:'Back',           type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'5',  restSeconds:120, skillTrack:'front_lever', skillLevel:5},
+  {id:'lib_cable_lat_ext',   name:'Cable Lat Extension',         pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  // ── PULL — HORIZONTAL ──────────────────────────────────────────────────
+  {id:'lib_bent_row_bar',    name:'Barbell Bent Over Row',       pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:4,defaultReps:'6',  restSeconds:120},
+  {id:'lib_bent_row_db',     name:'Dumbbell Bent Over Row',      pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_cable_row',       name:'Cable Row',                   pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_cable_row_sa',    name:'Single Arm Cable Row',        pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_ring_row',        name:'Ring Row',                    pillar:'pull',  bodypart:'Back',           type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_ring_row_rot',    name:'Ring Row to Rotation',        pillar:'pull',  bodypart:'Back',           type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'8ea',restSeconds:90, note:'Pull + rotate at top'},
+  {id:'lib_ring_archer_row', name:'Archer Ring Row',             pillar:'pull',  bodypart:'Back',           type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'6ea',restSeconds:90},
+  {id:'lib_tbar_row',        name:'T-Bar Row',                   pillar:'pull',  bodypart:'Back',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8',  restSeconds:90},
+  {id:'lib_face_pull',       name:'Face Pull',                   pillar:'pull',  bodypart:'Rear Delt',      type:'prehab',      stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:2,defaultReps:'15', restSeconds:45},
+  {id:'lib_rear_delt_fly',   name:'Rear Delt Fly',               pillar:'pull',  bodypart:'Rear Delt',      type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_ext_rotation_db', name:'DB External Rotation',        pillar:'pull',  bodypart:'Rear Delt',      type:'prehab',      stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:45},
+  // ── BICEPS ─────────────────────────────────────────────────────────────
+  {id:'lib_curl_bar',        name:'Barbell Curl',                pillar:'pull',  bodypart:'Biceps',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_curl_db',         name:'Dumbbell Bicep Curl',         pillar:'pull',  bodypart:'Biceps',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_hammer_curl',     name:'Hammer Curl',                 pillar:'pull',  bodypart:'Biceps',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_reverse_curl',    name:'Reverse Curl',                pillar:'pull',  bodypart:'Biceps',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_incline_curl',    name:'Incline Dumbbell Curl',       pillar:'pull',  bodypart:'Biceps',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_ring_curl',       name:'Ring Bicep Curl',             pillar:'pull',  bodypart:'Biceps',         type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_plate_pinch',     name:'Plate Pinch',                 pillar:'pull',  bodypart:'Grip/Forearms',  type:'strength',    stability:'bilateral_stable', inputType:'seconds', hasWeight:true, sets:3,defaultReps:'30', restSeconds:60},
+  // ── HINGE ──────────────────────────────────────────────────────────────
+  {id:'lib_deadlift',        name:'Conventional Deadlift',       pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'5',  restSeconds:180},
+  {id:'lib_rdl',             name:'Romanian Deadlift',           pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_rdl_sl',          name:'Single Leg RDL',              pillar:'hinge', bodypart:'Hamstrings',     type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90},
+  {id:'lib_rdl_sl_elev',     name:'Elevated Single Leg RDL',     pillar:'hinge', bodypart:'Hamstrings',     type:'functional',  stability:'elevated',         inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90},
+  {id:'lib_hip_thrust_bar',  name:'Barbell Hip Thrust',          pillar:'hinge', bodypart:'Glutes',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'10', restSeconds:120},
+  {id:'lib_hip_thrust_sl',   name:'Single Leg Hip Thrust',       pillar:'hinge', bodypart:'Glutes',         type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:90},
+  {id:'lib_hip_thrust_band', name:'Banded Hip Thrust',           pillar:'hinge', bodypart:'Glutes',         type:'strength',    stability:'band_resisted',    inputType:'reps', hasWeight:false, sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_glute_bridge',    name:'Glute Bridge',                pillar:'hinge', bodypart:'Glutes',         type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_nordic',          name:'Nordic Hamstring Curl',       pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'5',  restSeconds:120},
+  {id:'lib_nordic_bent',     name:'Bent-Leg Nordic',             pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'5',  restSeconds:120, defaultWeight:'10'},
+  {id:'lib_ham_curl_machine',name:'Hamstring Curl (Machine)',     pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_ham_curl_sl',     name:'Hamstring Curl (Single)',     pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_ham_curl_db',     name:'Hamstring Curl (DB)',         pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_good_morning',    name:'Good Morning',                pillar:'hinge', bodypart:'Hamstrings',     type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_kb_swing',        name:'Kettlebell Swing',            pillar:'hinge', bodypart:'Glutes',         type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:4,defaultReps:'15', restSeconds:60},
+  {id:'lib_kb_swing_rot',    name:'Rotational KB Swing',         pillar:'rotate',bodypart:'Glutes',         type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90, note:'Rotate at top — hips drive'},
+  // ── SQUAT / LOAD ───────────────────────────────────────────────────────
+  {id:'lib_squat_bar',       name:'Barbell Back Squat',          pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'5',  restSeconds:180},
+  {id:'lib_squat_front',     name:'Front Squat',                 pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:4,defaultReps:'6',  restSeconds:150},
+  {id:'lib_squat_box',       name:'Box Squat',                   pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:5,defaultReps:'10', restSeconds:120},
+  {id:'lib_squat_goblet',    name:'Goblet Squat',                pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'12', restSeconds:90},
+  {id:'lib_squat_bw',        name:'Bodyweight Squat',            pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_squat_bss',       name:'Bulgarian Split Squat',       pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'elevated',         inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90},
+  {id:'lib_squat_sl_elev',   name:'Elevated Single Leg Squat',   pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'elevated',         inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_atg_split',       name:'ATG Split Squat',             pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'elevated',         inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90, note:'Front foot elevated — full depth'},
+  {id:'lib_pistol_assist',   name:'Pistol Squat (Assisted)',     pillar:'load',  bodypart:'Quads',          type:'skill',       stability:'unilateral',       inputType:'reps', hasWeight:false, sets:3,defaultReps:'5ea',restSeconds:90, skillTrack:'pistol', skillLevel:4},
+  {id:'lib_pistol_bw',       name:'Pistol Squat',                pillar:'load',  bodypart:'Quads',          type:'skill',       stability:'unilateral',       inputType:'reps', hasWeight:false, sets:3,defaultReps:'5ea',restSeconds:90, skillTrack:'pistol', skillLevel:5},
+  {id:'lib_pistol_loaded',   name:'Pistol Squat (Loaded)',       pillar:'load',  bodypart:'Quads',          type:'skill',       stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'3ea',restSeconds:120, skillTrack:'pistol', skillLevel:6},
+  {id:'lib_dragon_squat',    name:'Dragon Squat',                pillar:'load',  bodypart:'Quads',          type:'skill',       stability:'unilateral',       inputType:'reps', hasWeight:false, sets:3,defaultReps:'3ea',restSeconds:120, skillTrack:'dragon', skillLevel:4},
+  {id:'lib_lunge_fwd',       name:'Forward Lunge',               pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:false, sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_lunge_walking',   name:'Walking Lunge',               pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_step_up',         name:'Step Up',                     pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_quad_ext_sl',     name:'Quad Extension (Single)',     pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_quad_ext_db',     name:'Quad Extension (Double)',     pillar:'load',  bodypart:'Quads',          type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_reverse_nordic',  name:'Reverse Nordic',              pillar:'load',  bodypart:'Quads',          type:'prehab',      stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'8',  restSeconds:60, note:'ATG quad tendon health'},
+  {id:'lib_tke',             name:'Terminal Knee Extensions',    pillar:'load',  bodypart:'Quads',          type:'prehab',      stability:'band_resisted',    inputType:'reps', hasWeight:false, sets:3,defaultReps:'15ea',restSeconds:45, note:'Knee health — VMO activation'},
+  {id:'lib_tib_raise',       name:'Tibialis Raises',             pillar:'load',  bodypart:'Quads',          type:'prehab',      stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'20', restSeconds:45, note:'ATG ankle and knee prep — daily'},
+  {id:'lib_straddle_raise',  name:'Straddle Seated Raises',      pillar:'load',  bodypart:'Adductors',      type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:2,defaultReps:'10ea',restSeconds:60, note:'10 each then max hold'},
+  // ── CARRY ──────────────────────────────────────────────────────────────
+  {id:'lib_farmers_carry',   name:'Farmers Carry',             pillar:'carry', bodypart:'Grip/Forearms',  type:'functional',  stability:'bilateral_stable', inputType:'seconds', hasWeight:true, sets:3,defaultReps:'30', restSeconds:90},
+  {id:'lib_suitcase_carry',  name:'Suitcase Carry',              pillar:'carry', bodypart:'Core',           type:'functional',  stability:'unilateral',       inputType:'seconds', hasWeight:true, sets:3,defaultReps:'30', restSeconds:90, note:'Single arm — resist lateral lean'},
+  {id:'lib_oh_carry',        name:'Overhead Carry',              pillar:'carry', bodypart:'Shoulders',      type:'functional',  stability:'unilateral',       inputType:'seconds', hasWeight:true, sets:3,defaultReps:'20', restSeconds:90},
+  {id:'lib_rack_carry',      name:'Rack Position Carry',         pillar:'carry', bodypart:'Core',           type:'functional',  stability:'unilateral',       inputType:'seconds', hasWeight:true, sets:3,defaultReps:'20', restSeconds:90},
+  // ── ROTATE ─────────────────────────────────────────────────────────────
+  {id:'lib_medball_rot_slam',name:'Rotational Med Ball Slam',    pillar:'rotate',bodypart:'Core',           type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'6ea',restSeconds:90, note:'Hips first — load the rotation'},
+  {id:'lib_medball_throw',   name:'Med Ball Wall Throw',         pillar:'rotate',bodypart:'Core',           type:'dynamic',     stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:4,defaultReps:'8ea',restSeconds:90},
+  {id:'lib_cable_chop_hk',   name:'Half Kneeling Cable Chop',    pillar:'rotate',bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_cable_chop_st',   name:'Standing Cable Chop',         pillar:'rotate',bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_cable_chop_sl',   name:'Single Leg Cable Chop',       pillar:'rotate',bodypart:'Core',           type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:90, note:'Rotation + balance — elite layer'},
+  {id:'lib_landmine_rot',    name:'Landmine Rotation',           pillar:'rotate',bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_ring_row_rot2',   name:'Ring Row to Rotation',        pillar:'rotate',bodypart:'Back',           type:'functional',  stability:'rings',            inputType:'reps', hasWeight:false, sets:3,defaultReps:'8ea',restSeconds:90},
+  {id:'lib_rot_band_punch',  name:'Banded Rotational Punch',     pillar:'rotate',bodypart:'Core',           type:'dynamic',     stability:'band_resisted',    inputType:'reps', hasWeight:false, sets:3,defaultReps:'10ea',restSeconds:60},
+  // ── BRACE / ANTI-ROTATE / CORE ─────────────────────────────────────────
+  {id:'lib_pallof_stand',    name:'Pallof Press (Standing)',      pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_pallof_sl',       name:'Pallof Press (Single Leg)',    pillar:'brace', bodypart:'Core',           type:'functional',  stability:'unilateral',       inputType:'reps', hasWeight:true,  sets:3,defaultReps:'8ea',restSeconds:60, note:'Anti-rotation + balance'},
+  {id:'lib_pallof_hk',       name:'Pallof Press (Half Kneeling)', pillar:'brace',bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'10ea',restSeconds:60},
+  {id:'lib_hollow_hold',     name:'Hollow Body Hold',             pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'20', restSeconds:60},
+  {id:'lib_hollow_rock',     name:'Hollow Body Rocks',            pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'15', restSeconds:60},
+  {id:'lib_ab_rollout',      name:'Barbell Ab Rollout',           pillar:'brace', bodypart:'Core',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:true,  sets:3,defaultReps:'5',  restSeconds:60},
+  {id:'lib_dead_bug',        name:'Dead Bug',                     pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'8ea',restSeconds:45},
+  {id:'lib_bird_dog',        name:'Bird Dog',                     pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'8ea',restSeconds:45},
+  {id:'lib_plank',           name:'Plank',                        pillar:'brace', bodypart:'Core',           type:'functional',  stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'30', restSeconds:45},
+  {id:'lib_side_plank',      name:'Side Plank',                   pillar:'brace', bodypart:'Core',           type:'functional',  stability:'unilateral',       inputType:'seconds', hasWeight:false,sets:3,defaultReps:'30', restSeconds:45},
+  {id:'lib_copenhagen',      name:'Copenhagen Plank',             pillar:'brace', bodypart:'Adductors',      type:'prehab',      stability:'unilateral',       inputType:'seconds', hasWeight:false,sets:3,defaultReps:'20', restSeconds:60, note:'Adductor and hip resilience'},
+  {id:'lib_leg_raise',       name:'Leg Raises',                   pillar:'brace', bodypart:'Core',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'12', restSeconds:60},
+  {id:'lib_hanging_leg_raise',name:'Hanging Leg Raise',           pillar:'brace', bodypart:'Core',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'10', restSeconds:60},
+  {id:'lib_lsit_rings',      name:'Ring L-Sit',                   pillar:'brace', bodypart:'Core',           type:'skill',       stability:'rings',            inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_lsit_bars',       name:'L-Sit (Parallel Bars)',        pillar:'brace', bodypart:'Core',           type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:90},
+  {id:'lib_dragon_flag',     name:'Dragon Flag',                  pillar:'brace', bodypart:'Core',           type:'strength',    stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'5',  restSeconds:90},
+  {id:'lib_ring_support',    name:'Ring Support Hold',            pillar:'brace', bodypart:'Shoulders',      type:'skill',       stability:'rings',            inputType:'seconds', hasWeight:false,sets:3,defaultReps:'20', restSeconds:60, skillTrack:'planche', skillLevel:1},
+  // ── HANDSTAND TRACK ────────────────────────────────────────────────────
+  {id:'lib_hs_wall',         name:'Wall Handstand Hold',          pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'30', restSeconds:60, skillTrack:'handstand', skillLevel:1},
+  {id:'lib_hs_chest_wall',   name:'Chest to Wall Handstand',      pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'30', restSeconds:90, skillTrack:'handstand', skillLevel:2},
+  {id:'lib_hs_kickup',       name:'Handstand Kick-Up',            pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:5,defaultReps:'5',  restSeconds:90, skillTrack:'handstand', skillLevel:3},
+  {id:'lib_hs_free',         name:'Freestanding Handstand',       pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:5,defaultReps:'15', restSeconds:90, skillTrack:'handstand', skillLevel:4},
+  {id:'lib_hs_walk',         name:'Handstand Walk',               pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:90, skillTrack:'handstand', skillLevel:5},
+  {id:'lib_hs_press_pike',   name:'Handstand Press (Pike)',        pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'handstand', skillLevel:6},
+  {id:'lib_hs_press_strad',  name:'Handstand Press (Straddle)',   pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'handstand', skillLevel:6},
+  {id:'lib_wrist_cond',      name:'Wrist Conditioning',           pillar:'press', bodypart:'Wrist',          type:'prehab',      stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:2,defaultReps:'60', restSeconds:30, note:'Circles, extensions, compressions — daily for handstand'},
+  // ── PLANCHE TRACK ──────────────────────────────────────────────────────
+  {id:'lib_planche_lean',    name:'Planche Lean',                 pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:90, skillTrack:'planche', skillLevel:1},
+  {id:'lib_planche_tuck',    name:'Tuck Planche',                 pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:120, skillTrack:'planche', skillLevel:2},
+  {id:'lib_planche_adv_tuck',name:'Advanced Tuck Planche',        pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'10', restSeconds:120, skillTrack:'planche', skillLevel:3},
+  {id:'lib_planche_strad',   name:'Straddle Planche',             pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'5',  restSeconds:120, skillTrack:'planche', skillLevel:4},
+  {id:'lib_planche_full',    name:'Full Planche',                 pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'seconds', hasWeight:false,sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'planche', skillLevel:5},
+  {id:'lib_planche_pushup',  name:'Planche Push-Up',              pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'3',  restSeconds:120, skillTrack:'planche', skillLevel:6},
+  {id:'lib_pseudo_planche',  name:'Pseudo Planche Push-Up',       pillar:'press', bodypart:'Shoulders',      type:'skill',       stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:3,defaultReps:'8',  restSeconds:90, note:'Wrists rotated out, lean forward'},
+  {id:'lib_scap_pushup',     name:'Scapular Push-Up',             pillar:'press', bodypart:'Shoulders',      type:'prehab',      stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:2,defaultReps:'10', restSeconds:45, note:'Protraction and retraction only'},
+  {id:'lib_scap_pullup',     name:'Scapular Pull-Up',             pillar:'pull',  bodypart:'Back',           type:'prehab',      stability:'bilateral_stable', inputType:'reps', hasWeight:false, sets:2,defaultReps:'10', restSeconds:45},
+  // ── CARDIO ─────────────────────────────────────────────────────────────
+  {id:'lib_liss',            name:'LISS Cardio',                  pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'40', restSeconds:0},
+  {id:'lib_hiit',            name:'HIIT',                         pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'20', restSeconds:0},
+  {id:'lib_rowing',          name:'Rowing Machine',               pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'20', restSeconds:0},
+  {id:'lib_cycling',         name:'Cycling',                      pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'30', restSeconds:0},
+  {id:'lib_padel',           name:'Padel',                        pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'60', restSeconds:0},
+  {id:'lib_tennis',          name:'Tennis',                       pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'60', restSeconds:0},
+  {id:'lib_swim',            name:'Swimming',                     pillar:'carry', bodypart:'Cardio',         type:'cardio',      stability:'bilateral_stable', inputType:'minutes', hasWeight:false,sets:1,defaultReps:'30', restSeconds:0},
+  {id:'lib_sled_drag_bwd',   name:'Backward Sled Drag',           pillar:'load',  bodypart:'Quads',          type:'functional',  stability:'bilateral_stable', inputType:'seconds', hasWeight:true, sets:3,defaultReps:'30', restSeconds:90, note:'ATG — safe quad and tendon loading'},
+];
+
+// Categories for the library browser
+const LIB_BODYPARTS=['All','Back','Back/Biceps','Biceps','Chest','Chest/Triceps','Core','Glutes','Grip/Forearms','Hamstrings','Quads','Rear Delt','Shoulders','Triceps','Adductors','Cardio','Wrist'];
+const LIB_TYPES=['All','strength','dynamic','functional','skill','prehab','cardio'];
+const LIB_PILLARS=['All','press','pull','hinge','load','carry','rotate','brace'];
+
 const DEFAULT_SESSIONS = {
   upper1:{name:'UPPER 1',sub:'Push Bias / Strength Control',duration:'60–75 min',
     warmup:['Scapular push-ups ×10','Front delt press-up ×10','KB shoulder press 6kg ×6 each','Reverse hollow body hold – 20s','— ×2 rounds —'],
@@ -759,11 +994,12 @@ function getSessions(){
       const parsed=JSON.parse(s);
       // Guard: if empty or not an object, fall through to defaults
       if(parsed && typeof parsed==='object' && Object.keys(parsed).length>0){
-        // Backfill missing inputType and restSeconds on older stored exercises
+        // Backfill missing inputType, restSeconds and weightType on older stored exercises
         Object.values(parsed).forEach(sess=>{
           if(sess.exercises) sess.exercises.forEach(ex=>{
             if(!ex.inputType)ex.inputType='reps';
             if(!ex.restSeconds)ex.restSeconds=90;
+            if(!ex.weightType)ex.weightType=ex.hasWeight?'kg':'none';
           });
         });
         return parsed;
@@ -783,8 +1019,7 @@ let restTimers={},logData={};
 let progKey=Object.keys(SESSIONS)[0]||Object.keys(DEFAULT_SESSIONS)[0];
 let editMode=false;
 
-// Input modal state
-let inputModalCb=null,inputModalType='reps';
+// Input modal state — declared in INPUT MODAL section below
 
 // ═══════════════════════════════════════════════════
 // UTILS
@@ -797,6 +1032,17 @@ const uid=()=>Math.random().toString(36).slice(2,9);
 function getSessionHist(key){return getHistory().filter(h=>h.sessionKey===key);}
 function getLastSession(key){const h=getSessionHist(key);return h.length?h[0]:null;}
 function getPrevSets(key,exId){const last=getLastSession(key);if(!last)return null;const ex=last.exercises.find(e=>e.id===exId);return ex?ex.sets:null;}
+function getPrevNote(key,exId){const last=getLastSession(key);if(!last)return '';const ex=last.exercises.find(e=>e.id===exId);return ex&&ex.note?ex.note:'';}
+function getExNoteHist(exId){
+  const notes=[];
+  getHistory().forEach(session=>{
+    const ex=session.exercises&&session.exercises.find(e=>e.id===exId);
+    if(ex&&ex.note&&ex.note.trim()){
+      notes.push({date:session.date,sessionName:session.sessionName,note:ex.note.trim()});
+    }
+  });
+  return notes; // newest-first — history is already newest-first
+}
 function getExHist(key,exId){return getSessionHist(key).map(s=>{const ex=s.exercises.find(e=>e.id===exId);return ex&&ex.sets.length?{date:s.date,sets:ex.sets}:null;}).filter(Boolean).reverse();}
 function getOverallPR(key,exId,hasW){let best=0;getExHist(key,exId).forEach(h=>h.sets.forEach(s=>{const v=hasW?(parseFloat(s.weight)||0):(parseFloat(s.reps)||0);if(v>best)best=v;}));return best;}
 function isNewPR(key,exId,hasW,weight,reps){const hist=getExHist(key,exId);if(!hist.length)return false;const val=hasW?(parseFloat(weight)||0):(parseFloat(reps)||0);if(!val)return false;return val>getOverallPR(key,exId,hasW);}
@@ -816,51 +1062,148 @@ function fmtVal(val, inputType){
 }
 
 // ═══════════════════════════════════════════════════
-// INPUT MODAL — large tap-friendly number entry
+// INPUT MODAL — combined reps + weight entry
 // ═══════════════════════════════════════════════════
-function openInputModal(label, title, currentVal, allowTypeToggle, defaultType, callback) {
-  inputModalCb = callback;
-  inputModalType = defaultType || 'reps';
-  document.getElementById('inputModalLabel').textContent = label;
-  document.getElementById('inputModalTitle').textContent = title;
-  const field = document.getElementById('inputModalField');
-  field.value = currentVal || '';
-  field.type = 'text';
-  field.inputMode = 'decimal';
+let inputModalCb=null, inputModalType='reps', inputModalHasWt=true, inputModalWtType='kg';
+let imCurrentFocus='rep';
+let imExId=null, imSetIdx=null;
 
-  // Type toggle (reps vs seconds) if allowed
-  const typeRow = document.getElementById('inputModalTypeRow');
-  if(allowTypeToggle) {
-    typeRow.innerHTML = `
-      <button class="imt-btn${inputModalType==='reps'?' active':''}" onclick="setInputModalType('reps')">REPS</button>
-      <button class="imt-btn${inputModalType==='seconds'?' active':''}" onclick="setInputModalType('seconds')">SECONDS</button>`;
-    typeRow.style.display='flex';
+function openSetModal(exId, setIdx){
+  imExId=exId; imSetIdx=setIdx;
+  const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  const iType=ex.inputType||'reps';
+  const wtType=ex.weightType||'none';
+  const hasWtCol=ex.hasWeight||(wtType==='seconds');
+  const prevSets=getPrevSets(activeKey,exId)||[];
+  const prevReps=prevSets[setIdx]?prevSets[setIdx].reps:(ex.defaultReps||'');
+  const prevWt=prevSets[setIdx]?prevSets[setIdx].weight:(ex.defaultWeight||'');
+  const curReps=logData[exId][setIdx].reps||'';
+  const curWt=logData[exId][setIdx].weight||'';
+
+  inputModalType=iType;
+  inputModalHasWt=hasWtCol;
+  inputModalWtType=wtType==='seconds'?'seconds':'kg';
+
+  // Set label
+  document.getElementById('inputModalLabel').textContent=`${ex.name} · SET ${setIdx+1}`;
+
+  // Rep type toggle
+  document.getElementById('imtReps').classList.toggle('active',iType!=='seconds');
+  document.getElementById('imtSecs').classList.toggle('active',iType==='seconds');
+  document.getElementById('imRepLabel').textContent=iType==='seconds'?'SECONDS':'REPS';
+
+  // Quick buttons — hide for seconds, show for reps
+  document.getElementById('repQuickRow').style.display=iType==='seconds'?'none':'flex';
+
+  // Clear quick btn selections
+  document.querySelectorAll('.rep-quick-btn').forEach(b=>b.classList.remove('sel'));
+
+  // Fields
+  const repField=document.getElementById('imRepField');
+  const wtField=document.getElementById('imWtField');
+  const wtWrap=document.getElementById('imWtWrap');
+
+  repField.value=curReps||'';
+  repField.placeholder=prevReps||'0';
+
+  if(hasWtCol){
+    wtWrap.style.display='flex';
+    wtField.value=curWt||'';
+    wtField.placeholder=prevWt||'—';
+    document.getElementById('imWtLabel').textContent=inputModalWtType==='seconds'?'SECS':'KG';
   } else {
-    typeRow.style.display='none';
+    wtWrap.style.display='none';
   }
-  updateInputModalPlaceholder();
 
-  const modal = document.getElementById('inputModal');
-  modal.classList.add('open');
-  setTimeout(()=>field.focus(),100);
+  imFocus('rep');
+  document.getElementById('inputModal').classList.add('open');
+  setTimeout(()=>repField.focus(),80);
 }
-function setInputModalType(t) {
-  inputModalType = t;
-  document.querySelectorAll('.imt-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===t));
-  updateInputModalPlaceholder();
+
+// Keep legacy function names working
+function openInputModal(label,title,currentVal,allowToggle,defaultType,callback){
+  // Legacy — just store callback and open via openSetModal flow
+  inputModalCb=callback; inputModalType=defaultType||'reps';
 }
-function updateInputModalPlaceholder() {
-  const field = document.getElementById('inputModalField');
-  const title = document.getElementById('inputModalTitle');
-  if(inputModalType==='seconds'){field.placeholder='e.g. 30';title.textContent='SECONDS';}
-  else{field.placeholder='e.g. 8';title.textContent='REPS';}
+function openRepModal(exId,setIdx){openSetModal(exId,setIdx);}
+function openWeightOrSecsModal(exId,setIdx){openSetModal(exId,setIdx);}
+function openWeightModal(exId,setIdx){openSetModal(exId,setIdx);}
+
+function imFocus(field){
+  imCurrentFocus=field;
+  document.getElementById('imRepField').classList.toggle('active-field',field==='rep');
+  document.getElementById('imWtField').classList.toggle('active-field',field==='wt');
 }
-function closeInputModal(){document.getElementById('inputModal').classList.remove('open');inputModalCb=null;}
+
+function imSetRepType(type){
+  inputModalType=type;
+  document.getElementById('imtReps').classList.toggle('active',type==='reps');
+  document.getElementById('imtSecs').classList.toggle('active',type==='seconds');
+  document.getElementById('imRepLabel').textContent=type==='seconds'?'SECONDS':'REPS';
+  document.getElementById('repQuickRow').style.display=type==='seconds'?'none':'flex';
+}
+
+function imQuickRep(val){
+  document.getElementById('imRepField').value=val;
+  document.querySelectorAll('.rep-quick-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===val));
+  // Auto-move focus to weight field if present
+  if(inputModalHasWt && document.getElementById('imWtWrap').style.display!=='none'){
+    imFocus('wt');
+    setTimeout(()=>document.getElementById('imWtField').focus(),50);
+  }
+}
+
+function closeInputModal(){
+  document.getElementById('inputModal').classList.remove('open');
+  inputModalCb=null; imExId=null; imSetIdx=null;
+}
+
 function confirmInputModal(){
-  const val = document.getElementById('inputModalField').value.trim();
-  if(inputModalCb) inputModalCb(val, inputModalType);
+  if(imExId===null || imSetIdx===null){closeInputModal();return;}
+  const repVal=document.getElementById('imRepField').value.trim();
+  const wtVal=document.getElementById('imWtField').value.trim();
+  if(!repVal && !wtVal){closeInputModal();return;}
+
+  const exId=imExId, setIdx=imSetIdx;
+  const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+
+  // Update reps
+  if(repVal){
+    logData[exId][setIdx].reps=repVal;
+    logData[exId][setIdx].inputType=inputModalType;
+    const dispEl=document.getElementById(`repval_${exId}_${setIdx}`);
+    if(dispEl){dispEl.textContent=repVal;dispEl.style.color='var(--ink)';}
+    // Clear quick btn highlights
+    document.querySelectorAll('.rep-quick-btn').forEach(b=>b.classList.remove('sel'));
+  }
+
+  // Update weight
+  if(wtVal && inputModalHasWt){
+    logData[exId][setIdx].weight=wtVal;
+    const wDisp=document.getElementById(`wtval_${exId}_${setIdx}`);
+    if(wDisp){wDisp.textContent=wtVal;wDisp.style.color='var(--ink)';}
+    // Auto-fill subsequent empty sets
+    for(let j=setIdx+1;j<ex.sets;j++){
+      if(!logData[exId][j].weight){
+        logData[exId][j].weight=wtVal;
+        const d=document.getElementById(`wtval_${exId}_${j}`);
+        if(d){d.textContent=wtVal;d.style.color='var(--ink3)';}
+      }
+    }
+  }
+
+  // Auto-fill reps on next sets
+  if(repVal && setIdx<ex.sets-1 && !logData[exId][setIdx+1].reps){
+    logData[exId][setIdx+1].reps=repVal;
+    const d=document.getElementById(`repval_${exId}_${setIdx+1}`);
+    if(d){d.textContent=repVal;d.style.color='var(--ink3)';}
+  }
+
+  checkPRDisplay(exId,setIdx);
+  highlightSetRowIfReady(exId,setIdx);
   closeInputModal();
 }
+
 document.getElementById('inputModal').addEventListener('keydown',function(e){if(e.key==='Enter')confirmInputModal();});
 
 // ═══════════════════════════════════════════════════
@@ -902,15 +1245,22 @@ function renderEditView(){
         <th style="min-width:130px;">Exercise</th>
         <th style="width:50px;">Sets</th>
         <th style="width:65px;">Default</th>
-        <th style="width:65px;">Wt(kg)</th>
+        <th style="width:65px;">Wt/Val</th>
         <th style="width:70px;">Has Wt?</th>
         <th style="width:80px;">Input type</th>
+        <th style="width:80px;">Col 2 type</th>
         <th style="width:60px;">Rest(s)</th>
         <th style="width:80px;"></th>
       </tr></thead><tbody>`;
     s.exercises.forEach((ex,exIdx)=>{
       const iType=ex.inputType||'reps';
       html+=`<tr id="editrow_${sKey}_${exIdx}">
+        <td style="width:28px;padding-left:10px!important;">
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <button class="reorder-btn" onclick="moveExercise('${sKey}',${exIdx},-1)" ${exIdx===0?'disabled style="opacity:0.2;"':''}>▲</button>
+            <button class="reorder-btn" onclick="moveExercise('${sKey}',${exIdx},1)" ${exIdx===s.exercises.length-1?'disabled style="opacity:0.2;"':''}>▼</button>
+          </div>
+        </td>
         <td class="edit-name-cell"><input class="edit-field" style="font-size:13px;font-weight:500;width:100%;min-width:120px;" type="text" value="${ex.name}" onchange="editExField('${sKey}',${exIdx},'name',this.value)"></td>
         <td><input class="edit-field" type="number" value="${ex.sets}" min="1" max="20" onchange="editExField('${sKey}',${exIdx},'sets',parseInt(this.value)||1)" style="width:100%;text-align:center;"></td>
         <td><input class="edit-field" type="text" value="${ex.defaultReps||''}" onchange="editExField('${sKey}',${exIdx},'defaultReps',this.value)" style="width:100%;text-align:center;"></td>
@@ -924,17 +1274,39 @@ function renderEditView(){
           <button class="wt-opt${iType==='seconds'?' active':''}" onclick="setInputType('${sKey}',${exIdx},'seconds')">Secs</button>
           <button class="wt-opt${iType==='minutes'?' active':''}" onclick="setInputType('${sKey}',${exIdx},'minutes')">Mins</button>
         </div></td>
+        <td><div class="weight-toggle">
+          <button class="wt-opt${(ex.weightType||'kg')==='kg'?' active':''}" onclick="setWeightType('${sKey}',${exIdx},'kg')">kg</button>
+          <button class="wt-opt${ex.weightType==='seconds'?' active':''}" onclick="setWeightType('${sKey}',${exIdx},'seconds')">Secs</button>
+          <button class="wt-opt${ex.weightType==='none'?' active':''}" onclick="setWeightType('${sKey}',${exIdx},'none')">—</button>
+        </div></td>
         <td><input class="edit-field" type="number" value="${ex.restSeconds||90}" min="10" max="600" onchange="editExField('${sKey}',${exIdx},'restSeconds',parseInt(this.value)||90)" style="width:100%;text-align:center;"></td>
         <td><button class="edit-del-btn" onclick="deleteExercise('${sKey}',${exIdx})">✕ Remove</button></td>
       </tr>`;
     });
-    html+=`</tbody></table><div class="add-ex-row"><button class="add-ex-btn" onclick="addExercise('${sKey}')">+ Add exercise</button></div></div>`;
+    html+=`</tbody></table><div class="add-ex-row">
+      <button class="add-ex-btn" onclick="openExerciseBrowser('add',null,'${sKey}')">+ Add from library</button>
+      <button class="add-ex-btn" onclick="addExercise('${sKey}')">+ New custom</button>
+    </div></div>`;
   });
   el.innerHTML=html;
 }
 function editExField(sKey,exIdx,field,val){SESSIONS[sKey].exercises[exIdx][field]=val;saveSessions(SESSIONS);}
+function moveExercise(sKey,exIdx,dir){
+  const exs=SESSIONS[sKey].exercises;
+  const newIdx=exIdx+dir;
+  if(newIdx<0||newIdx>=exs.length)return;
+  const tmp=exs[exIdx];exs[exIdx]=exs[newIdx];exs[newIdx]=tmp;
+  saveSessions(SESSIONS);renderEditView();
+}
 function setHasWeight(sKey,exIdx,val){SESSIONS[sKey].exercises[exIdx].hasWeight=val;saveSessions(SESSIONS);renderEditView();}
 function setInputType(sKey,exIdx,val){SESSIONS[sKey].exercises[exIdx].inputType=val;saveSessions(SESSIONS);renderEditView();}
+function setWeightType(sKey,exIdx,val){
+  SESSIONS[sKey].exercises[exIdx].weightType=val;
+  if(val==='seconds')SESSIONS[sKey].exercises[exIdx].hasWeight=false;
+  else if(val==='kg')SESSIONS[sKey].exercises[exIdx].hasWeight=true;
+  else SESSIONS[sKey].exercises[exIdx].hasWeight=false;
+  saveSessions(SESSIONS);renderEditView();
+}
 function deleteExercise(sKey,exIdx){if(!confirm(`Remove "${SESSIONS[sKey].exercises[exIdx].name}"?`))return;SESSIONS[sKey].exercises.splice(exIdx,1);saveSessions(SESSIONS);renderEditView();}
 function addExercise(sKey){
   const newEx={id:sKey+'_'+uid(),name:'New Exercise',sets:3,defaultReps:'10',hasWeight:true,defaultWeight:'',superset:false,inputType:'reps'};
@@ -1001,12 +1373,24 @@ function _loadSession(key){
     s.warmup.forEach((w,i)=>{html+=`<label class="wu-item" id="wu${i}"><input type="checkbox" onchange="document.getElementById('wu${i}').classList.toggle('done',this.checked)"> ${w}</label>`;});
     html+=`</div>`;
   }
-  html+=`<div class="slabel" style="margin-top:20px;">EXERCISES</div>`;
+  html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:14px;">
+    <div class="slabel" style="margin:0;">EXERCISES</div>
+    <button onclick="openExerciseBrowser('add',null,'${key}')" style="background:none;border:1px dashed var(--border2);color:var(--ink3);font-family:var(--font-mono);font-size:10px;padding:5px 12px;cursor:pointer;letter-spacing:1px;">+ ADD EXERCISE</button>
+  </div>`;
 
   s.exercises.forEach(ex=>{
     const iType=ex.inputType||'reps';
     const prev=getPrevSets(key,ex.id);
+    const prevNote=getPrevNote(key,ex.id);
     let prevHTML='';
+    const noteHistory=getExNoteHist(ex.id).slice(0,3);
+    const prevNoteHTML=noteHistory.length?`<div style="background:#1a2a3a;border:1px solid #2a4a6a;border-left:3px solid var(--blue);padding:8px 12px;margin-bottom:10px;">
+      <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">↩ EXERCISE NOTE HISTORY</div>
+      ${noteHistory.map((n,i)=>`<div style="padding:5px 0;${i<noteHistory.length-1?'border-bottom:1px solid #2a4a6a;margin-bottom:5px;':''}">
+        <div style="font-family:var(--font-mono);font-size:9px;color:#557;margin-bottom:2px;">${fmtDate(n.date)} · ${n.sessionName}</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:#aac4dd;line-height:1.5;">${n.note}</div>
+      </div>`).join('') }
+    </div>`:'';
     if(prev&&prev.length){
       const chips=prev.map((ps,i)=>{
         const parts=[];
@@ -1029,15 +1413,16 @@ function _loadSession(key){
       rows+=`<tr class="set-row" id="sr_${ex.id}_${i}">
         <td class="set-num-cell">${i+1}</td>
         <td>
-          <div class="set-field-tap" id="repdisp_${ex.id}_${i}" onclick="openRepModal('${ex.id}',${i})"
+          <div class="set-field-tap" id="repdisp_${ex.id}_${i}" onclick="openSetModal('${ex.id}',${i})"
             style="background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:18px;padding:10px 6px;text-align:center;cursor:pointer;min-height:46px;display:flex;align-items:center;justify-content:center;gap:4px;">
             <span id="repval_${ex.id}_${i}" style="color:${!logData[ex.id][i].reps?'var(--border2)':'var(--ink)'};">${logData[ex.id][i].reps||repPlaceholder}</span>
             ${iType==='seconds'?'<span style="font-size:10px;color:var(--blue);font-family:var(--font-mono);">s</span>':iType==='minutes'?'<span style="font-size:10px;color:var(--lime);font-family:var(--font-mono);">min</span>':''}
           </div>
         </td>
-        <td>${ex.hasWeight?`<div class="set-field-tap" id="wtdisp_${ex.id}_${i}" onclick="openWeightModal('${ex.id}',${i})"
-          style="background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:18px;padding:10px 6px;text-align:center;cursor:pointer;min-height:46px;display:flex;align-items:center;justify-content:center;">
+        <td>${(ex.hasWeight||ex.weightType==='seconds')?`<div class="set-field-tap" id="wtdisp_${ex.id}_${i}" onclick="openSetModal('${ex.id}',${i})"
+          style="background:var(--surface2);border:1px solid var(--border);color:var(--ink);font-family:var(--font-mono);font-size:18px;padding:10px 6px;text-align:center;cursor:pointer;min-height:46px;display:flex;align-items:center;justify-content:center;gap:4px;">
           <span id="wtval_${ex.id}_${i}" style="color:${!logData[ex.id][i].weight?'var(--border2)':'var(--ink)'};">${logData[ex.id][i].weight||pw||'—'}</span>
+          ${ex.weightType==='seconds'?'<span style="font-size:10px;color:var(--blue);font-family:var(--font-mono);">s</span>':''}
         </div>`:`<div style="background:var(--surface2);border:1px solid var(--border);opacity:0.2;min-height:46px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink3);">—</div>`}</td>
         <td class="rpe-cell" style="min-width:155px;">
           <div class="rpe-picker">${rpeBtns}</div>
@@ -1064,14 +1449,16 @@ function _loadSession(key){
           <div class="ex-target">${ex.sets}×${iType==='seconds'?ex.defaultReps+'s':iType==='minutes'?ex.defaultReps+' min':ex.defaultReps}${ex.hasWeight&&ex.defaultWeight?' · '+ex.defaultWeight+'kg':''}</div>
         </div>
         ${ex.superset?`<span class="ss-pill">${ex.ssLabel||'SS'}</span>`:''}
+        <button onclick="event.stopPropagation();openSwapExercise('${ex.id}',${s.exercises.indexOf(ex)})" style="background:none;border:1px solid #c8c3b820;color:var(--ink3);font-family:var(--font-mono);font-size:9px;padding:3px 7px;cursor:pointer;letter-spacing:1px;flex-shrink:0;">SWAP</button>
         <span class="chevron" id="chv_${ex.id}">▾</span>
       </div>
       ${gymBadge}
       <div class="ex-body" id="exb_${ex.id}">
         ${ex.note?`<div style="font-size:11px;color:var(--ink3);margin-bottom:10px;font-family:var(--font-mono);">${ex.note}</div>`:''}
+        ${prevNoteHTML}
         ${prevHTML}
         <table class="set-table">
-          <tr><th style="width:28px;">#</th><th>${repLabel}</th><th>${ex.hasWeight?'kg':'—'}</th><th>RPE <span style="font-weight:400;opacity:0.6;">6–10</span></th><th style="width:80px;">Log</th></tr>
+          <tr><th style="width:28px;">#</th><th>${repLabel}</th><th>${ex.weightType==='seconds'?'Secs':ex.hasWeight?'kg':'—'}</th><th>RPE <span style="font-weight:400;opacity:0.6;">6–10</span></th><th style="width:80px;">Log</th></tr>
           ${rows}
         </table>
         <div class="rest-strip" id="rest_${ex.id}">
@@ -1084,8 +1471,15 @@ function _loadSession(key){
       </div>
     </div>`;
   });
+  // Add session end notes block
+  html+=`<div style="background:var(--surface);border:1px solid var(--border);padding:16px;margin-top:20px;">
+    <div style="font-family:var(--font-display);font-size:18px;letter-spacing:2px;margin-bottom:8px;">SESSION NOTES</div>
+    <textarea id="sessionEndNote" class="note-field" rows="3" placeholder="General session comments, how you felt, anything to remember..." oninput="logData.__sessionNote=this.value" style="min-height:60px;"></textarea>
+  </div>`;
   wrap.innerHTML=html;
   if(s.exercises.length)toggleEx(s.exercises[0].id);
+  // Restore session note if resuming
+  if(logData.__sessionNote){const el=document.getElementById('sessionEndNote');if(el)el.value=logData.__sessionNote;}
 }
 
 // Open rep modal
@@ -1104,10 +1498,14 @@ function openRepModal(exId, setIdx) {
 }
 
 // Open weight modal
-function openWeightModal(exId, setIdx) {
+function openWeightModal(exId, setIdx){openWeightOrSecsModal(exId,setIdx);}
+
+function openWeightOrSecsModal(exId, setIdx) {
   const ex = SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  const isSecsCol = ex.weightType==='seconds';
   const current = logData[exId][setIdx].weight || '';
-  openInputModal(`${ex.name} · SET ${setIdx+1}`, 'WEIGHT (kg)', current, false, 'weight', (val) => {
+  const title = isSecsCol ? 'SECONDS' : 'WEIGHT (kg)';
+  openInputModal(`${ex.name} · SET ${setIdx+1}`, title, current, false, isSecsCol?'seconds':'weight', (val) => {
     if(!val) return;
     logData[exId][setIdx].weight = val;
     const dispEl = document.getElementById(`wtval_${exId}_${setIdx}`);
@@ -1125,6 +1523,19 @@ function openWeightModal(exId, setIdx) {
   });
 }
 
+function highlightSetRowIfReady(exId, setIdx){
+  const ex=SESSIONS[activeKey]&&SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  if(!ex)return;
+  const data=logData[exId]&&logData[exId][setIdx];
+  if(!data)return;
+  const hasRep=!!data.reps;
+  const needsWt=ex.hasWeight||(ex.weightType==='seconds');
+  const hasWt=!!data.weight;
+  const ready=hasRep&&(!needsWt||hasWt);
+  const row=document.getElementById(`sr_${exId}_${setIdx}`);
+  if(row)row.style.background=ready&&!data.done?'rgba(143,190,0,0.07)':'';
+}
+
 function checkPRDisplay(exId, setIdx) {
   const ex = SESSIONS[activeKey].exercises.find(e=>e.id===exId);
   const flag = document.getElementById(`prf_${exId}_${setIdx}`);
@@ -1132,6 +1543,137 @@ function checkPRDisplay(exId, setIdx) {
   const w = logData[exId][setIdx].weight||'';
   const r = logData[exId][setIdx].reps||'';
   flag.classList.toggle('show', isNewPR(activeKey, exId, ex.hasWeight, w, r));
+}
+
+let _libBrowser={mode:'swap',exIdx:null,sessionKey:null,filters:{bodypart:'All',type:'All',pillar:'All',search:''}};
+
+function openExerciseBrowser(mode, exIdx, sessionKey){
+  _libBrowser={mode,exIdx,sessionKey:sessionKey||activeKey,filters:{bodypart:'All',type:'All',pillar:'All',search:''}};
+  renderExerciseBrowser();
+}
+function openSwapExercise(exId,exIdx){openExerciseBrowser('swap',exIdx,activeKey);}
+function openAddExercise(sessionKey){openExerciseBrowser('add',null,sessionKey);}
+
+function renderExerciseBrowser(){
+  const {mode,exIdx,sessionKey,filters}=_libBrowser;
+  const pool=getLibraryExercises(filters);
+  const title=mode==='swap'?`SWAP EXERCISE`:'ADD EXERCISE';
+
+  // Get previous session exercises as suggestions
+  const history=getHistory();
+  const lastSession=history.find(h=>h.sessionKey===sessionKey);
+  const prevExIds=lastSession?new Set(lastSession.exercises.map(e=>e.id)):new Set();
+  // Mark exercises used last session
+  const suggestions=pool.filter(e=>prevExIds.has(e.id)&&e.id!=='__custom').slice(0,4);
+
+  const filterBar=`
+    <div style="padding:10px 14px;background:var(--ink);border-bottom:1px solid #333;">
+      <input id="libSearch" value="${filters.search}" oninput="libFilter('search',this.value)" placeholder="Search exercises..." style="width:100%;background:#242220;border:1px solid #444;color:#fff;font-family:var(--font-mono);font-size:14px;padding:8px 12px;box-sizing:border-box;margin-bottom:8px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <select onchange="libFilter('bodypart',this.value)" style="background:#242220;border:1px solid #444;color:#888;font-family:var(--font-mono);font-size:11px;padding:5px 8px;flex:1;">
+          ${LIB_BODYPARTS.map(b=>`<option value="${b}"${filters.bodypart===b?' selected':''}>${b.toUpperCase()}</option>`).join('')}
+        </select>
+        <select onchange="libFilter('type',this.value)" style="background:#242220;border:1px solid #444;color:#888;font-family:var(--font-mono);font-size:11px;padding:5px 8px;flex:1;">
+          ${LIB_TYPES.map(t=>`<option value="${t}"${filters.type===t?' selected':''}>${t.toUpperCase()}</option>`).join('')}
+        </select>
+        <select onchange="libFilter('pillar',this.value)" style="background:#242220;border:1px solid #444;color:#888;font-family:var(--font-mono);font-size:11px;padding:5px 8px;flex:1;">
+          ${LIB_PILLARS.map(p=>`<option value="${p}"${filters.pillar===p?' selected':''}>${p.toUpperCase()}</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
+
+  const suggSection=suggestions.length&&!filters.search?`
+    <div style="padding:8px 14px 4px;background:var(--ink);">
+      <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--blue);margin-bottom:6px;">↩ FROM LAST SESSION</div>
+      ${suggestions.map(e=>`<button onclick="confirmLibraryExercise('${e.id}')" style="display:block;width:100%;background:#1a2a3a;border:1px solid #2a4a6a;color:#aac4dd;font-family:var(--font-display);font-size:15px;letter-spacing:1px;padding:8px 14px;text-align:left;cursor:pointer;margin-bottom:4px;">
+        ${e.name} <span style="font-family:var(--font-mono);font-size:9px;color:#668;">${e.bodypart}</span>
+      </button>`).join('')}
+    </div>`:''
+
+  const exList=pool.slice(0,80).map(e=>`
+    <button onclick="confirmLibraryExercise('${e.id}')" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:transparent;border:none;border-bottom:1px solid var(--bg2);color:var(--ink);padding:10px 14px;text-align:left;cursor:pointer;gap:8px;">
+      <div>
+        <div style="font-family:var(--font-display);font-size:15px;letter-spacing:1px;">${e.name}</div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink3);">${e.bodypart} · ${e.type}</div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--border2);flex-shrink:0;">${e.sets}×${e.defaultReps}</div>
+    </button>`).join('');
+
+  const existing=document.getElementById('_libBrowserModal');
+  if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='_libBrowserModal';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:flex;align-items:flex-end;justify-content:center;';
+  div.innerHTML=`<div style="background:var(--surface);width:100%;max-width:480px;max-height:80vh;display:flex;flex-direction:column;border-top:3px solid var(--lime);">
+    <div style="padding:12px 16px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <div style="font-family:var(--font-display);font-size:18px;letter-spacing:2px;color:var(--lime);">${title}</div>
+      <button onclick="document.getElementById('_libBrowserModal').remove()" style="background:none;border:none;color:#888;font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    ${filterBar}
+    <div style="overflow-y:auto;flex:1;">
+      ${suggSection}
+      ${exList||'<div style="padding:20px;font-family:var(--font-mono);font-size:11px;color:var(--ink3);">No exercises found</div>'}
+    </div>
+  </div>`;
+  div.onclick=function(e){if(e.target===div)div.remove();};
+  document.body.appendChild(div);
+  // Focus search
+  setTimeout(()=>{const s=document.getElementById('libSearch');if(s)s.focus();},80);
+}
+
+function libFilter(key,val){
+  _libBrowser.filters[key]=val;
+  renderExerciseBrowser();
+}
+
+function confirmLibraryExercise(exId){
+  document.getElementById('_libBrowserModal')&&document.getElementById('_libBrowserModal').remove();
+  if(_libBrowser.mode==='swap'){
+    swapExercise(_libBrowser.exIdx,exId);
+  } else {
+    addExerciseToSession(_libBrowser.sessionKey,exId);
+  }
+}
+
+function addExerciseToSession(sessionKey,exId){
+  const ex=getAllExercises().find(e=>e.id===exId);
+  if(!ex)return;
+  const newEx={...ex,id:exId};
+  if(!SESSIONS[sessionKey])return;
+  SESSIONS[sessionKey].exercises.push(newEx);
+  if(sessionKey===activeKey){
+    // Mid-session add
+    logData[exId]=Array.from({length:newEx.sets},()=>({reps:'',weight:'',rpe:null,done:false}));
+    // Re-render session keeping timer
+    const savedStart=startTime;
+    loadSession(sessionKey);
+    startTime=savedStart;
+    if(savedStart){document.getElementById('timerBar').classList.add('active');document.getElementById('startBtn').textContent='● RUNNING';}
+  } else {
+    saveSessions(SESSIONS);
+    renderEditView();
+  }
+}
+
+function swapExercise(exIdx, newExId){
+  document.querySelectorAll('[style*="position:fixed"][style*="z-index:500"]').forEach(el=>{
+    if(!el.id)el.remove();
+  });
+  const allEx=getAllExercises();
+  const newEx=allEx.find(e=>e.id===newExId);
+  if(!newEx)return;
+  SESSIONS[activeKey].exercises[exIdx]={...newEx};
+  logData[newExId]=Array.from({length:newEx.sets},()=>({reps:'',weight:'',rpe:null,done:false,inputType:newEx.inputType||'reps'}));
+  // Re-render active session
+  const key=activeKey;
+  document.getElementById('active-wrap').style.display='none';
+  document.getElementById('picker-wrap').style.display='none';
+  const wrap=document.getElementById('active-wrap');
+  // Reload session keeping timer
+  const savedStart=startTime;
+  loadSession(key);
+  startTime=savedStart;
+  if(savedStart){document.getElementById('timerBar').classList.add('active');document.getElementById('startBtn').textContent='● RUNNING';}
 }
 
 function toggleEx(id){document.getElementById('exb_'+id).classList.toggle('open');document.getElementById('chv_'+id).classList.toggle('open');}
@@ -1291,8 +1833,8 @@ function finishSession(){
   const s=SESSIONS[activeKey];
   const entry={
     id:Date.now(),sessionKey:activeKey,sessionName:s.name,sessionSub:s.sub,
-    date:Date.now(),duration:dur,
-    exercises:s.exercises.map(ex=>({
+    date:Date.now(),duration:dur,sessionNote:logData.__sessionNote||'',
+    exercises:s.exercises.map(ex=>({weightType:ex.weightType||'kg',
       id:ex.id,name:ex.name,inputType:ex.inputType||'reps',
       sets:(logData[ex.id]||[]).filter(s=>s.done).map(s=>({reps:s.reps,weight:s.weight,rpe:s.rpe||null})),
       note:logData[ex.id]?(logData[ex.id].note||''):''
@@ -1373,13 +1915,42 @@ function buildSparkline(pts,label,prVal){
 // HISTORY + WEEKLY ANALYSIS
 // ═══════════════════════════════════════════════════
 function getWeekStart(ts){const d=new Date(ts);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();}
+let histFilterMode='all', histFilterGroup='all';
+
 function renderHistory(){
   const h=getHistory();
-  // Weekly analysis
   renderWeeklyAnalysis(h);
   const el=document.getElementById('historyList');
   if(!h.length){el.innerHTML=`<div class="empty-state">No sessions logged yet.</div>`;return;}
-  el.innerHTML=h.map((entry,idx)=>{
+
+  // Filter controls
+  const muscleGroups=['All','Chest/Push','Back/Pull','Shoulders','Quads','Hamstrings','Glutes','Biceps','Core','Cardio'];
+  const filterHtml=`<div>
+    <div class="hist-filter-row">
+      <button class="hist-filter-btn${histFilterMode==='all'?' active':''}" onclick="setHistFilter('all')">ALL</button>
+      <button class="hist-filter-btn${histFilterMode==='week'?' active':''}" onclick="setHistFilter('week')">BY WEEK</button>
+      <button class="hist-filter-btn${histFilterMode==='month'?' active':''}" onclick="setHistFilter('month')">BY MONTH</button>
+    </div>
+    <div class="hist-filter-row">
+      ${muscleGroups.map(g=>`<button class="hist-filter-btn${histFilterGroup===g?' active':''}" onclick="setHistMuscle('${g}')">${g.toUpperCase()}</button>`).join('')}
+    </div>
+  </div>`;
+
+  if(histFilterMode==='week'||histFilterMode==='month'){
+    el.innerHTML=filterHtml+renderHistoryGrouped(h,histFilterMode);
+    return;
+  }
+
+  // Flat list with optional muscle filter
+  let filtered=h;
+  if(histFilterGroup!=='All'){
+    filtered=h.filter(entry=>entry.exercises.some(ex=>{
+      const muscle=MUSCLE_MAP[ex.id]||'Other';
+      return muscle===histFilterGroup||muscle.includes(histFilterGroup.split('/')[0]);
+    }));
+  }
+
+  el.innerHTML=filterHtml+filtered.map((entry,idx)=>{
     const mins=Math.floor(entry.duration/60);
     const totalSets=entry.exercises.reduce((a,e)=>a+e.sets.length,0);
     const rows=entry.exercises.filter(e=>e.sets.length).map(e=>{
@@ -1387,12 +1958,22 @@ function renderHistory(){
       const str=e.sets.map((s,i)=>{
         const p=[`S${i+1}`];
         if(s.reps) p.push(fmtVal(s.reps,iType));
-        if(s.weight) p.push(s.weight+'kg');
+        if(s.weight) p.push(e.weightType==='seconds'?fmtVal(s.weight,'seconds'):s.weight+'kg');
         if(s.rpe) p.push(`RPE ${s.rpe}`);
         return p.join(' ');
       }).join(' · ');
+      // Note for this session
       const noteHtml=e.note?`<div class="history-note">${e.note}</div>`:'';
-      return `<div class="history-ex-row"><span class="history-ex-name">${e.name}</span><span class="history-ex-sets">${str}</span>${noteHtml}</div>`;
+      // All notes ever on this exercise — show count and tap to expand
+      const allNotes=getExNoteHist(e.id);
+      const allNotesBtn=allNotes.length>1?`<button onclick="event.stopPropagation();toggleExNoteHistory('enh_${idx}_${e.id}')" style="background:none;border:none;color:var(--blue);font-family:var(--font-mono);font-size:9px;letter-spacing:1px;cursor:pointer;padding:2px 0;">▾ ${allNotes.length} notes across all sessions</button>
+        <div id="enh_${idx}_${e.id}" style="display:none;margin-top:6px;">
+          ${allNotes.map(n=>`<div style="padding:5px 0;border-bottom:1px solid var(--bg2);">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink3);">${fmtDate(n.date)} · ${n.sessionName}</div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--ink2);margin-top:2px;">${n.note}</div>
+          </div>`).join('')}
+        </div>`:'';
+      return `<div class="history-ex-row"><span class="history-ex-name">${e.name}</span><span class="history-ex-sets">${str}</span>${noteHtml}${allNotesBtn}</div>`;
     }).join('');
     return `<div class="history-entry">
       <div class="history-entry-head" onclick="toggleHist('hb${idx}')">
@@ -1406,7 +1987,10 @@ function renderHistory(){
           <button class="del-btn" onclick="event.stopPropagation();delEntry(${idx})">✕</button>
         </div>
       </div>
-      <div class="history-body" id="hb${idx}">${rows||'<div style="color:var(--ink3);font-size:12px;">No sets logged.</div>'}</div>
+      <div class="history-body" id="hb${idx}">
+        ${entry.sessionNote?`<div style="background:var(--surface2);border-left:3px solid var(--border2);padding:8px 12px;margin-bottom:10px;font-family:var(--font-mono);font-size:11px;color:var(--ink3);font-style:italic;">${entry.sessionNote}</div>`:''}
+        ${rows||'<div style="color:var(--ink3);font-size:12px;">No sets logged.</div>'}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1444,6 +2028,70 @@ function renderWeeklyAnalysis(h){
     <div class="slabel" style="margin-bottom:10px;">SETS BY MUSCLE GROUP</div>
     ${muscleRows}
   </div>`;
+}
+
+function setHistFilter(mode){histFilterMode=mode;renderHistory();}
+function setHistMuscle(g){histFilterGroup=g;renderHistory();}
+
+function renderHistoryGrouped(h, mode){
+  // Group sessions by week or month
+  const groups={};
+  h.forEach((entry,idx)=>{
+    const d=new Date(entry.date);
+    let key;
+    if(mode==='week'){
+      const ws=getWeekStart(entry.date);
+      const we=new Date(ws+6*86400000);
+      key=`${new Date(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})} – ${we.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})}`.toUpperCase();
+    } else {
+      key=d.toLocaleDateString('en-GB',{month:'long',year:'numeric'}).toUpperCase();
+    }
+    if(!groups[key])groups[key]={label:key,entries:[],totalMins:0,totalSets:0,muscleSets:{}};
+    groups[key].entries.push({entry,idx});
+    groups[key].totalMins+=Math.floor(entry.duration/60);
+    entry.exercises.forEach(ex=>{
+      const muscle=MUSCLE_MAP[ex.id]||'Other';
+      groups[key].muscleSets[muscle]=(groups[key].muscleSets[muscle]||0)+ex.sets.length;
+      groups[key].totalSets+=ex.sets.length;
+    });
+  });
+
+  return Object.values(groups).map((g,gi)=>{
+    const muscleRows=Object.entries(g.muscleSets).sort((a,b)=>b[1]-a[1]).map(([m,s])=>`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink2);width:110px;flex-shrink:0;">${m}</div>
+        <div style="flex:1;height:5px;background:var(--border);"><div style="height:5px;background:var(--lime);width:${Math.round(s/g.totalSets*100)}%;"></div></div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink3);min-width:28px;text-align:right;">${s}</div>
+      </div>`).join('');
+
+    const sessionRows=g.entries.map(({entry,idx})=>`
+      <div style="padding:6px 0;border-bottom:1px solid var(--bg2);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--font-display);font-size:16px;letter-spacing:1px;">${entry.sessionName}</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink3);">${fmtDay(entry.date)}</div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);">${Math.floor(entry.duration/60)}min · ${entry.exercises.reduce((a,e)=>a+e.sets.length,0)} sets</div>
+      </div>`).join('');
+
+    return `<div class="hist-period-card">
+      <div class="hist-period-head" onclick="document.getElementById('hpb${gi}').classList.toggle('open')">
+        <div><div class="hist-period-title">${g.label}</div></div>
+        <div class="hist-period-stats">${g.entries.length} sessions · ${g.totalMins} min · ${g.totalSets} sets</div>
+      </div>
+      <div class="hist-period-body" id="hpb${gi}">
+        <div style="margin-bottom:12px;">${muscleRows}</div>
+        ${sessionRows}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleExNoteHistory(id){
+  const el=document.getElementById(id);if(!el)return;
+  const open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  const btn=el.previousElementSibling;
+  if(btn)btn.textContent=(open?'▴':'▾')+btn.textContent.slice(1);
 }
 
 function toggleHist(id){document.getElementById(id).classList.toggle('open');}
@@ -1901,8 +2549,16 @@ function deleteFoodItem(idx){
 function toggleGymNote(exId){
   const el=document.getElementById('gymNote_'+exId);
   const chv=document.getElementById('gymChv_'+exId);
+  const btn=el&&el.previousElementSibling;
   if(!el)return;
   const open=el.style.display==='none';
+  if(open){
+    // Re-read live from localStorage every time it opens
+    const note=(getGymSettings()[exId]||'').trim();
+    el.textContent=note||'No settings saved — add via Settings → GYM SETTINGS';
+    el.style.color=note?'var(--ink2)':'var(--ink3)';
+    if(btn)btn.style.color=note?'var(--blue)':'var(--border2)';
+  }
   el.style.display=open?'block':'none';
   if(chv)chv.textContent=open?'▴':'▾';
 }
@@ -1914,7 +2570,10 @@ function renderGymSettings(){
   const wrap=document.getElementById('gymSettingsWrap');
   if(!wrap)return;
   const allExercises=[];
+  // Session exercises first, then library
   Object.values(SESSIONS).forEach(s=>s.exercises.forEach(ex=>{if(!allExercises.find(e=>e.id===ex.id))allExercises.push({id:ex.id,name:ex.name});}));
+  EXERCISE_LIBRARY.forEach(ex=>{if(!allExercises.find(e=>e.id===ex.id))allExercises.push({id:ex.id,name:ex.name});});
+  allExercises.sort((a,b)=>a.name.localeCompare(b.name));
   const gymData=getGymSettings();
   const existingIds=Object.keys(gymData);
   let html=`<div class="gym-settings-list">`;
@@ -1923,8 +2582,13 @@ function renderGymSettings(){
     const exInfo=allExercises.find(e=>e.id===exId)||{name:exId};
     html+=`<div class="gym-setting-row">
       <div class="gym-setting-ex">${exInfo.name}</div>
-      <div class="gym-setting-note"><textarea onchange="updateGymNote('${exId}',this.value)" placeholder="Pin height, cable position, seat setting...">${gymData[exId]||''}</textarea></div>
-      <button onclick="removeGymSetting('${exId}')" style="background:none;border:none;color:var(--border2);cursor:pointer;font-size:12px;padding:4px;align-self:flex-start;">✕</button>
+      <div class="gym-setting-note">
+        <textarea id="gymtxt_${exId}" placeholder="Pin height, cable position, seat setting...">${gymData[exId]||''}</textarea>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button onclick="saveGymNote('${exId}')" style="background:var(--ink);color:var(--bg);border:none;padding:6px 14px;font-family:var(--font-display);font-size:13px;letter-spacing:2px;cursor:pointer;flex:1;">SAVE</button>
+          <button onclick="removeGymSetting('${exId}')" style="background:none;border:1px solid var(--border);color:var(--ink3);font-family:var(--font-mono);font-size:11px;padding:6px 10px;cursor:pointer;">✕ REMOVE</button>
+        </div>
+      </div>
     </div>`;
   });
   html+=`</div>
@@ -1943,6 +2607,16 @@ function renderGymSettings(){
 function addGymSetting(){
   const sel=document.getElementById('gymExSelect');const exId=sel.value;if(!exId)return;
   const gymData=getGymSettings();gymData[exId]='';saveGymSettings(gymData);renderSettings();
+}
+function saveGymNote(exId){
+  const ta=document.getElementById('gymtxt_'+exId);
+  if(!ta)return;
+  const gymData=getGymSettings();
+  gymData[exId]=ta.value.trim();
+  saveGymSettings(gymData);
+  // Visual confirmation
+  const btn=ta.parentElement.querySelector('button');
+  if(btn){const orig=btn.textContent;btn.textContent='✓ SAVED';btn.style.background='var(--lime)';btn.style.color='var(--ink)';setTimeout(()=>{btn.textContent=orig;btn.style.background='var(--ink)';btn.style.color='var(--bg)';},1200);}
 }
 function updateGymNote(exId,val){const gymData=getGymSettings();gymData[exId]=val;saveGymSettings(gymData);}
 function removeGymSetting(exId){const gymData=getGymSettings();delete gymData[exId];saveGymSettings(gymData);renderSettings();}
@@ -2062,8 +2736,24 @@ const PTAG={
 
 function getAllExercises(){
   const seen={};
+  // Session exercises first
   Object.values(SESSIONS).forEach(s=>s.exercises.forEach(ex=>{if(!seen[ex.id])seen[ex.id]={...ex};}));
+  // Then library exercises (session exercises take precedence)
+  EXERCISE_LIBRARY.forEach(ex=>{if(!seen[ex.id])seen[ex.id]={...ex};});
   return Object.values(seen);
+}
+
+function getLibraryExercises(filters={}){
+  let pool=[...EXERCISE_LIBRARY];
+  // Also include custom exercises from sessions not in library
+  Object.values(SESSIONS).forEach(s=>s.exercises.forEach(ex=>{
+    if(!EXERCISE_LIBRARY.find(l=>l.id===ex.id)&&!pool.find(p=>p.id===ex.id))pool.push(ex);
+  }));
+  if(filters.bodypart&&filters.bodypart!=='All') pool=pool.filter(e=>e.bodypart===filters.bodypart);
+  if(filters.type&&filters.type!=='All') pool=pool.filter(e=>e.type===filters.type);
+  if(filters.pillar&&filters.pillar!=='All') pool=pool.filter(e=>e.pillar===filters.pillar);
+  if(filters.search) pool=pool.filter(e=>e.name.toLowerCase().includes(filters.search.toLowerCase()));
+  return pool;
 }
 
 function spreadTrainingDays(n){
