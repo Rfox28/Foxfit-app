@@ -305,6 +305,52 @@ main{max-width:860px;margin:0 auto;padding:28px 20px 120px;}
 /* EDIT MODE */
 .edit-banner{background:var(--ink);color:var(--lime);padding:8px 20px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:center;display:none;}
 .edit-banner.active{display:block;}
+/* ── AMRAP / EMOM BLOCKS ── */
+.block-card{border:1px solid var(--border);margin-bottom:12px;overflow:hidden;}
+.block-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.block-head.amrap{background:#2a0808;border-bottom:2px solid var(--red);}
+.block-head.emom{background:#08102a;border-bottom:2px solid var(--blue);}
+.block-title{font-family:var(--font-display);font-size:20px;letter-spacing:2px;}
+.block-title.amrap{color:var(--red);}
+.block-title.emom{color:var(--blue);}
+.block-meta{font-family:var(--font-mono);font-size:10px;color:#888;margin-top:2px;letter-spacing:1px;}
+.block-body{padding:12px 16px;background:var(--surface);}
+.block-ex-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bg2);}
+.block-ex-item:last-child{border-bottom:none;}
+.block-ex-letter{font-family:var(--font-display);font-size:18px;color:var(--border2);width:22px;flex-shrink:0;}
+.block-ex-name{font-family:var(--font-display);font-size:16px;letter-spacing:1px;flex:1;}
+.block-ex-target{font-family:var(--font-mono);font-size:10px;color:var(--ink3);white-space:nowrap;}
+/* Block logging */
+.block-log{padding:14px 16px;background:var(--surface2);border-top:1px solid var(--border);}
+.block-log-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--ink3);margin-bottom:6px;text-transform:uppercase;}
+.block-rounds-wrap{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.block-rounds-field{background:var(--surface);border:2px solid var(--border);color:var(--ink);font-family:var(--font-display);font-size:42px;padding:10px 16px;text-align:center;width:110px;-moz-appearance:textfield;flex-shrink:0;}
+.block-rounds-field::-webkit-inner-spin-button,.block-rounds-field::-webkit-outer-spin-button{-webkit-appearance:none;}
+.block-rounds-field:focus{outline:none;}
+.block-rounds-field.amrap-field:focus{border-color:var(--red);}
+.block-rounds-field.emom-field:focus{border-color:var(--blue);}
+.block-partial-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bg2);}
+.block-partial-row:last-child{border-bottom:none;}
+.block-partial-name{font-family:var(--font-mono);font-size:11px;color:var(--ink2);flex:1;}
+.block-partial-field{background:var(--surface);border:1px solid var(--border);color:var(--ink);font-family:var(--font-display);font-size:22px;padding:6px 10px;width:70px;text-align:center;-moz-appearance:textfield;}
+.block-partial-field::-webkit-inner-spin-button,.block-partial-field::-webkit-outer-spin-button{-webkit-appearance:none;}
+.block-partial-field:focus{outline:none;border-color:var(--ink);}
+.block-log-btn{width:100%;padding:12px;font-family:var(--font-display);font-size:16px;letter-spacing:2px;border:none;cursor:pointer;margin-top:10px;transition:all 0.15s;}
+.block-log-btn.amrap-btn{background:var(--red);color:#fff;}
+.block-log-btn.amrap-btn.logged{background:#2a0808;color:var(--red);border:1px solid var(--red);}
+.block-log-btn.emom-btn{background:var(--blue);color:#fff;}
+.block-log-btn.emom-btn.logged{background:#08102a;color:var(--blue);border:1px solid var(--blue);}
+/* Block timer */
+.block-timer{display:none;align-items:center;gap:12px;padding:10px 14px;background:var(--ink);margin-top:8px;}
+.block-timer.active{display:flex;}
+.block-timer-count{font-family:var(--font-display);font-size:32px;letter-spacing:2px;}
+.block-timer-count.amrap-count{color:var(--red);}
+.block-timer-count.emom-count{color:var(--blue);}
+.block-timer-label{font-family:var(--font-mono);font-size:9px;color:#888;letter-spacing:2px;}
+/* Block edit in edit mode */
+.block-edit-card{background:var(--surface);border:1px solid var(--border);margin-bottom:10px;overflow:hidden;}
+.block-edit-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
 /* ── REDESIGNED EDIT UI ── */
 .edit-session-block{background:var(--surface);border:1px solid var(--border);margin-bottom:16px;}
 .edit-session-head{padding:16px 18px;border-bottom:2px solid var(--lime);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--ink);}
@@ -1165,6 +1211,16 @@ const fmtDate=ts=>new Date(ts).toLocaleDateString('en-GB',{day:'numeric',month:'
 const fmtDay=ts=>new Date(ts).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}).toUpperCase();
 const uid=()=>Math.random().toString(36).slice(2,9);
 
+// ── BLOCK HELPERS ──
+function getSessionBlocks(key){
+  return (SESSIONS[key]&&SESSIONS[key].blocks)||[];
+}
+function saveSessionBlocks(key,blocks){
+  if(!SESSIONS[key])return;
+  SESSIONS[key].blocks=blocks;
+  saveSessions(SESSIONS);
+}
+
 function getSessionHist(key){return getHistory().filter(h=>h.sessionKey===key);}
 function getLastSession(key){const h=getSessionHist(key);return h.length?h[0]:null;}
 function getPrevSets(key,exId){const last=getLastSession(key);if(!last)return null;const ex=last.exercises.find(e=>e.id===exId);return ex?ex.sets:null;}
@@ -1792,6 +1848,88 @@ function _loadSession(key){
       </div>
     </div>`;
   });
+  // ── BLOCKS: AMRAP / EMOM ──
+  const sessionBlocks=getSessionBlocks(key);
+  if(sessionBlocks.length){
+    html+=`<div style="margin-top:24px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div class="slabel" style="margin:0;">BLOCKS</div>
+    </div>`;
+    sessionBlocks.forEach((block,bi)=>{
+      const letters='ABCDEFGH';
+      const blockExItems=block.exercises.map((ex,ei)=>`
+        <div class="block-ex-item">
+          <div class="block-ex-letter">${block.type==='emom'?'M'+(ei+1):letters[ei]}</div>
+          <div class="block-ex-name">${ex.name}</div>
+          <div class="block-ex-target">${ex.reps} ${ex.inputType==='seconds'?'s':ex.inputType==='minutes'?'min':'reps'}${ex.hasWeight&&ex.weight?' · '+ex.weight+'kg':''}</div>
+        </div>`).join('');
+
+      const isLogged=!!(logData['__block_'+bi]&&logData['__block_'+bi].logged);
+      const restInfo=block.restBetweenRounds?`· ${fmtTime(block.restBetweenRounds)} rest/round`:'';
+
+      if(block.type==='amrap'){
+        html+=`<div class="block-card">
+          <div class="block-head amrap">
+            <div>
+              <div class="block-title amrap">AMRAP · ${fmtTime(block.timeCap)}</div>
+              <div class="block-meta">${block.exercises.length} exercises · as many rounds as possible ${restInfo}</div>
+            </div>
+            <button onclick="startBlockTimer(${bi},'amrap',${block.timeCap})" style="background:var(--red);border:none;color:#fff;font-family:var(--font-display);font-size:13px;letter-spacing:2px;padding:8px 16px;cursor:pointer;">START</button>
+          </div>
+          <div class="block-body">${blockExItems}</div>
+          <div class="block-timer" id="btimer_${bi}">
+            <div><div class="block-timer-label">TIME LEFT</div><div class="block-timer-count amrap-count" id="btcount_${bi}"></div></div>
+            <button onclick="stopBlockTimer(${bi})" style="margin-left:auto;background:none;border:1px solid #444;color:#888;font-family:var(--font-mono);font-size:10px;padding:4px 10px;cursor:pointer;letter-spacing:1px;">STOP</button>
+          </div>
+          <div class="block-log">
+            <div class="block-log-label">LOG RESULT</div>
+            <div class="block-rounds-wrap">
+              <input class="block-rounds-field amrap-field" type="number" min="0" id="block_rounds_${bi}" placeholder="0" value="${isLogged?logData['__block_'+bi].rounds:''}" oninput="blockUpdateRounds(${bi},this.value)">
+              <div><div style="font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--ink);">ROUNDS</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);">completed in full</div></div>
+            </div>
+            <div class="block-log-label" style="margin-bottom:8px;">PARTIAL REPS (incomplete round)</div>
+            ${block.exercises.map((ex,ei)=>`<div class="block-partial-row">
+              <div class="block-partial-name">${letters[ei]}. ${ex.name}</div>
+              <input class="block-partial-field" type="number" min="0" id="block_partial_${bi}_${ei}" placeholder="0" value="${isLogged&&logData['__block_'+bi].partial?logData['__block_'+bi].partial[ei]||'':''}" oninput="blockUpdatePartial(${bi},${ei},this.value)">
+            </div>`).join('')}
+            <button class="block-log-btn amrap-btn${isLogged?' logged':''}" id="blog_${bi}" onclick="logBlock(${bi},'amrap')">${isLogged?'✓ LOGGED — TAP TO EDIT':'LOG RESULT'}</button>
+          </div>
+        </div>`;
+      } else if(block.type==='emom'){
+        const totalRounds=block.totalMins;
+        html+=`<div class="block-card">
+          <div class="block-head emom">
+            <div>
+              <div class="block-title emom">EMOM · ${block.totalMins} MIN</div>
+              <div class="block-meta">${block.exercises.length} exercise${block.exercises.length!==1?'s':''}/min · ${totalRounds} rounds total ${restInfo}</div>
+            </div>
+            <button onclick="startBlockTimer(${bi},'emom',${block.totalMins*60})" style="background:var(--blue);border:none;color:#fff;font-family:var(--font-display);font-size:13px;letter-spacing:2px;padding:8px 16px;cursor:pointer;">START</button>
+          </div>
+          <div class="block-body">${blockExItems}</div>
+          <div class="block-timer" id="btimer_${bi}">
+            <div>
+              <div class="block-timer-label">MINUTE</div>
+              <div class="block-timer-count emom-count" id="btcount_${bi}">1 / ${totalRounds}</div>
+            </div>
+            <div style="margin-left:auto;text-align:right;">
+              <div class="block-timer-label">WORK TIME LEFT</div>
+              <div style="font-family:var(--font-display);font-size:20px;color:#fff;" id="btsecs_${bi}">0:40</div>
+            </div>
+            <button onclick="stopBlockTimer(${bi})" style="background:none;border:1px solid #444;color:#888;font-family:var(--font-mono);font-size:10px;padding:4px 10px;cursor:pointer;letter-spacing:1px;flex-shrink:0;">STOP</button>
+          </div>
+          <div class="block-log">
+            <div class="block-log-label">LOG RESULT</div>
+            <div class="block-rounds-wrap">
+              <input class="block-rounds-field emom-field" type="number" min="0" max="${totalRounds}" id="block_rounds_${bi}" placeholder="0" value="${isLogged?logData['__block_'+bi].rounds:''}" oninput="blockUpdateRounds(${bi},this.value)">
+              <div><div style="font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--ink);">/ ${totalRounds} MINS</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);">minutes completed</div></div>
+            </div>
+            <button class="block-log-btn emom-btn${isLogged?' logged':''}" id="blog_${bi}" onclick="logBlock(${bi},'emom')">${isLogged?'✓ LOGGED — TAP TO EDIT':'LOG RESULT'}</button>
+          </div>
+        </div>`;
+      }
+    });
+    html+=`</div>`;
+  }
+
   // Add session end notes block
   html+=`<div style="background:var(--surface);border:1px solid var(--border);padding:16px;margin-top:20px;">
     <div style="font-family:var(--font-display);font-size:18px;letter-spacing:2px;margin-bottom:8px;">SESSION NOTES</div>
@@ -1869,6 +2007,7 @@ function checkPRDisplay(exId, setIdx) {
 let _libBrowser={mode:'swap',exIdx:null,sessionKey:null,filters:{bodypart:'All',type:'All',pillar:'All',search:''}};
 
 function openExerciseBrowser(mode, exIdx, sessionKey){
+  // mode: 'swap' | 'add' | 'addToBlock'
   _libBrowser={mode,exIdx,sessionKey:sessionKey||activeKey,filters:{bodypart:'All',type:'All',pillar:'All',search:''}};
   renderExerciseBrowser();
 }
@@ -1951,9 +2090,66 @@ function confirmLibraryExercise(exId){
   document.getElementById('_libBrowserModal')&&document.getElementById('_libBrowserModal').remove();
   if(_libBrowser.mode==='swap'){
     swapExercise(_libBrowser.exIdx,exId);
+  } else if(_libBrowser.mode==='addToBlock'){
+    addExerciseToBlock(_libBrowser.sessionKey,_libBrowser.exIdx,exId);
   } else {
     addExerciseToSession(_libBrowser.sessionKey,exId);
   }
+}
+
+// ── BLOCK MANAGEMENT ──
+function addSessionBlock(sKey,type){
+  const blocks=getSessionBlocks(sKey);
+  if(type==='amrap'){
+    blocks.push({type:'amrap',timeCap:600,restBetweenRounds:0,exercises:[]});
+  } else {
+    blocks.push({type:'emom',totalMins:10,restBetweenRounds:0,exercises:[]});
+  }
+  saveSessionBlocks(sKey,blocks);
+  renderEditView();
+}
+function removeSessionBlock(sKey,bi){
+  if(!confirm('Remove this block?'))return;
+  const blocks=getSessionBlocks(sKey);
+  blocks.splice(bi,1);
+  saveSessionBlocks(sKey,blocks);
+  renderEditView();
+}
+function editBlockField(sKey,bi,field,val){
+  const blocks=getSessionBlocks(sKey);
+  if(!blocks[bi])return;
+  blocks[bi][field]=val;
+  saveSessionBlocks(sKey,blocks);
+}
+function editBlockExField(sKey,bi,ei,field,val){
+  const blocks=getSessionBlocks(sKey);
+  if(!blocks[bi]||!blocks[bi].exercises[ei])return;
+  blocks[bi].exercises[ei][field]=val;
+  saveSessionBlocks(sKey,blocks);
+}
+function removeBlockExercise(sKey,bi,ei){
+  const blocks=getSessionBlocks(sKey);
+  if(!blocks[bi])return;
+  blocks[bi].exercises.splice(ei,1);
+  saveSessionBlocks(sKey,blocks);
+  renderEditView();
+}
+// Called from library browser when mode='addToBlock'
+function addExerciseToBlock(sKey,bi,exId){
+  const ex=getAllExercises().find(e=>e.id===exId);
+  if(!ex)return;
+  const blocks=getSessionBlocks(sKey);
+  if(!blocks[bi])return;
+  blocks[bi].exercises.push({
+    id:ex.id, name:ex.name,
+    reps:ex.defaultReps||'10',
+    inputType:ex.inputType||'reps',
+    hasWeight:ex.hasWeight||false,
+    weight:ex.defaultWeight||'',
+    workSecs:40 // for EMOM
+  });
+  saveSessionBlocks(sKey,blocks);
+  renderEditView();
 }
 
 function setMidSessionFormat(exId,fmt){
@@ -2072,6 +2268,82 @@ function logSet(exId,i){
 }
 
 function saveNote(exId,val){if(logData[exId])logData[exId].note=val;}
+
+// ── BLOCK LOGGING ──
+function initBlockLogData(bi){
+  if(!logData['__block_'+bi]){
+    const block=getSessionBlocks(activeKey)[bi];
+    logData['__block_'+bi]={type:block.type,rounds:'',partial:{},logged:false};
+  }
+}
+function blockUpdateRounds(bi,val){initBlockLogData(bi);logData['__block_'+bi].rounds=val;}
+function blockUpdatePartial(bi,ei,val){initBlockLogData(bi);logData['__block_'+bi].partial[ei]=val;}
+function logBlock(bi,type){
+  initBlockLogData(bi);
+  const rounds=document.getElementById('block_rounds_'+bi).value;
+  if(!rounds&&type==='amrap'){alert('Enter rounds completed');return;}
+  logData['__block_'+bi].logged=true;
+  logData['__block_'+bi].rounds=rounds;
+  const btn=document.getElementById('blog_'+bi);
+  if(btn){btn.textContent='✓ LOGGED — TAP TO EDIT';btn.classList.add('logged');}
+}
+
+// ── BLOCK TIMERS ──
+const blockTimers={};
+function startBlockTimer(bi,type,totalSecs){
+  if(blockTimers[bi])clearInterval(blockTimers[bi]);
+  const strip=document.getElementById('btimer_'+bi);
+  if(!strip)return;
+  strip.classList.add('active');
+  let remaining=totalSecs;
+  const block=getSessionBlocks(activeKey)[bi];
+  const exCount=block.exercises.length;
+
+  if(type==='amrap'){
+    const countEl=document.getElementById('btcount_'+bi);
+    blockTimers[bi]=setInterval(()=>{
+      remaining--;
+      if(countEl)countEl.textContent=fmtTime(remaining);
+      if(remaining<=0){
+        clearInterval(blockTimers[bi]);
+        strip.classList.remove('active');
+        // Haptic + alert
+        if(window.navigator&&window.navigator.vibrate)window.navigator.vibrate([200,100,200]);
+        document.getElementById('blog_'+bi).style.animation='pulse 0.5s 3';
+      }
+    },1000);
+    if(countEl)countEl.textContent=fmtTime(remaining);
+  } else if(type==='emom'){
+    const totalMins=block.totalMins;
+    let currentMin=0;
+    let secInMin=0;
+    const workSecs=block.exercises[0]&&block.exercises[0].workSecs||40;
+    const countEl=document.getElementById('btcount_'+bi);
+    const secsEl=document.getElementById('btsecs_'+bi);
+    blockTimers[bi]=setInterval(()=>{
+      secInMin++;
+      if(secInMin>=60){secInMin=0;currentMin++;}
+      if(currentMin>=totalMins){
+        clearInterval(blockTimers[bi]);strip.classList.remove('active');
+        if(window.navigator&&window.navigator.vibrate)window.navigator.vibrate([200,100,200]);
+        return;
+      }
+      const exIdx=currentMin%exCount;
+      const secsLeft=workSecs-secInMin;
+      if(countEl)countEl.textContent=`MIN ${currentMin+1} / ${totalMins} · ${block.exercises[exIdx]?block.exercises[exIdx].name:''}`;
+      if(secsEl)secsEl.textContent=secsLeft>0?fmtTime(secsLeft):'REST';
+      // Beep at start of each new minute
+      if(secInMin===0&&window.navigator&&window.navigator.vibrate)window.navigator.vibrate(100);
+    },1000);
+    if(countEl)countEl.textContent=`MIN 1 / ${totalMins} · ${block.exercises[0]?block.exercises[0].name:''}`;
+    if(secsEl)secsEl.textContent=fmtTime(workSecs);
+  }
+}
+function stopBlockTimer(bi){
+  if(blockTimers[bi])clearInterval(blockTimers[bi]);
+  const strip=document.getElementById('btimer_'+bi);
+  if(strip)strip.classList.remove('active');
+}
 
 // ═══════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════
@@ -2406,6 +2678,10 @@ function finishSession(){
   const entry={
     id:Date.now(),sessionKey:activeKey,sessionName:s.name,sessionSub:s.sub,
     date:Date.now(),duration:dur,sessionNote:logData.__sessionNote||'',
+    blocks:(getSessionBlocks(activeKey)||[]).map((block,bi)=>({
+      ...block,
+      logged:logData['__block_'+bi]||null
+    })),
     exercises:s.exercises.map(ex=>({weightType:ex.weightType||'kg',
       id:ex.id,name:ex.name,inputType:ex.inputType||'reps',
       sets:(logData[ex.id]||[]).filter(s=>s.done).map(s=>({reps:s.reps,weight:s.weight,rpe:s.rpe||null})),
