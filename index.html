@@ -946,9 +946,12 @@ const MUSCLE_MAP = {
   // Lower — session exercises (split out clearly)
   l1_thrust:'Glutes', l1_rdl:'Hamstrings', l1_nordic:'Hamstrings',
   l1_hamcurl_s:'Hamstrings', l1_hamcurl_d:'Hamstrings',
+  l1_eccham:'Hamstrings', l1_calf_def:'Quads', l1_revnordic:'Quads',
   l2_squat:'Quads', l2_hollow:'Core', l2_tke:'Quads', l2_legraise:'Core',
   l2_slsquat:'Quads', l2_rollout:'Core', l2_quadex_s:'Quads', l2_quadex_d:'Quads',
   l2_straddle:'Adductors',
+  l2_sled_bwd:'Quads', l2_sled_bwd2:'Quads', l2_sled_fwd:'Quads', l2_splitfloat:'Quads',
+  l2_slouch:'Quads', l2_banded_tke:'Quads', l2_quad_iso:'Quads', l2_calf_wall:'Quads',
   // Cardio — session exercises (split by type)
   c_liss:'Cardio · LISS', c_hiit:'Cardio · HIIT',
   c_padel:'Cardio · Padel', c_tenn:'Cardio · Tennis',
@@ -1236,27 +1239,31 @@ const DEFAULT_SESSIONS = {
       {id:'u3_pinch',  name:'Plate Pinch',            sets:3,defaultReps:'30',  hasWeight:true, superset:true, ssLabel:'SS2',inputType:'seconds'},
       {id:'u3_revcurl',name:'Reverse Curls',          sets:3,defaultReps:'10',  hasWeight:true, superset:true, ssLabel:'SS2',inputType:'reps'},
     ]},
-  lower1:{name:'LEG DAY 1',sub:'Posterior Chain',duration:'~90 min',
-    warmup:['Leg swings fwd & back ×10 each','Crab walks ×20 → single-leg abduction ×10','90/90 hip with forward lean ×10','Reverse back bridge + rotation ×5','— ×2 rounds —'],
+  lower1:{name:'LEG DAY 1',sub:'Posterior Chain + Knee Rehab',duration:'75–90 min',
+    warmup:['Kneeling Plantarflexion – 60s each side (left priority)','Quad Stretch Standing PNF – 3×20s hold + release','Reverse Nordics (BW) – 2×5 slow, no forced range','90/90 Hip + Forward Lean ×10 each','Leg swings fwd & back ×10 each','— ×2 rounds —'],
     exercises:[
-      {id:'l1_thrust',   name:'Barbell Hip Thrust',    sets:5,defaultReps:'10',  hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l1_rdl',      name:'RDLs',                  sets:3,defaultReps:'10',  hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l1_nordic',   name:'Bent-Leg Nordics',      sets:3,defaultReps:'5',   hasWeight:true, defaultWeight:'10',superset:false,inputType:'reps'},
-      {id:'l1_hamcurl_s',name:'Hamstring Curl (Single)',sets:3,defaultReps:'10ea',hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l1_hamcurl_d',name:'Hamstring Curl (Double)',sets:3,defaultReps:'15',  hasWeight:true, superset:false,inputType:'reps'},
+      {id:'l1_thrust',   name:'Barbell Hip Thrust',              sets:5,defaultReps:'10',   hasWeight:true, superset:false,inputType:'reps',restSeconds:90},
+      {id:'l1_rdl',      name:'RDLs',                            sets:3,defaultReps:'10',   hasWeight:true, superset:false,inputType:'reps',restSeconds:90},
+      {id:'l1_eccham',   name:'Eccentric Hamstring Curl (Seated)',sets:3,defaultReps:'8ea',  hasWeight:true, superset:false,inputType:'reps',restSeconds:90,note:'2s up / 4s eccentric. More on right side. Seated variation only.'},
+      {id:'l1_nordic',   name:'Bent-Leg Nordics',                sets:3,defaultReps:'5',    hasWeight:true, defaultWeight:'5',superset:false,inputType:'reps',restSeconds:90,note:'Dropped from 10kg — slow eccentrics only, stop before patellar pain'},
+      {id:'l1_hamcurl_s',name:'Hamstring Curl (Single)',         sets:3,defaultReps:'10ea',  hasWeight:true, superset:false,inputType:'reps',restSeconds:90},
+      {id:'l1_calf_def', name:'Single Leg Calf Raise (Deficit)', sets:3,defaultReps:'10ea',  hasWeight:false,superset:false,inputType:'reps',restSeconds:60,note:'Step off a plate — full range. Left ankle plantarflexion is restricted. Priority on left.'},
+      {id:'l1_revnordic',name:'Reverse Nordics',                 sets:3,defaultReps:'8',    hasWeight:false,superset:false,inputType:'reps',restSeconds:90,note:'Best exercise for knee flexion range. Load only if warm-up sets felt easy. Builds quad length under load.'},
     ]},
-  lower2:{name:'LEG DAY 2',sub:'Quad Bias + Knee Health',duration:'75–90 min',
-    warmup:['Spanish Squat Hold – 30s','Forward Lunges ×10 each','Bodyweight Squats ×10','Standing Tibialis Raises ×20','— ×2 rounds —'],
+  lower2:{name:'LEG DAY 2',sub:'Knee Rehab + Quad Reintroduction',duration:'75–90 min',
+    warmup:['Kneeling Plantarflexion – 60s each side (left priority)','Split Stance Pogos ×10 each side','Standing Tibialis Raises ×20','Spanish Squat Hold – 30s','Banded TKE Staggered Stance ×15 each','— ×2 rounds —'],
     exercises:[
-      {id:'l2_squat',   name:'Box Squat',               sets:5,defaultReps:'10',  hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l2_hollow',  name:'Hollow Hold',              sets:5,defaultReps:'20',  hasWeight:true, defaultWeight:'10',superset:true,ssLabel:'SS',inputType:'seconds'},
-      {id:'l2_tke',     name:'Terminal Knee Extensions', sets:3,defaultReps:'10ea',hasWeight:false,superset:false,inputType:'reps'},
-      {id:'l2_legraise',name:'Leg Raises',               sets:3,defaultReps:'10',  hasWeight:false,superset:true, ssLabel:'SS',inputType:'reps'},
-      {id:'l2_slsquat', name:'Elevated SL Squats',       sets:3,defaultReps:'10',  hasWeight:false,superset:false,inputType:'reps'},
-      {id:'l2_rollout', name:'Barbell Ab Rollouts',      sets:3,defaultReps:'5',   hasWeight:true, superset:true, ssLabel:'SS',inputType:'reps'},
-      {id:'l2_quadex_s',name:'Quad Extensions (Single)', sets:3,defaultReps:'10ea',hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l2_quadex_d',name:'Quad Extensions (Double)', sets:3,defaultReps:'15',  hasWeight:true, superset:false,inputType:'reps'},
-      {id:'l2_straddle',name:'Straddle Seated Raises',   sets:2,defaultReps:'10ea',hasWeight:false,superset:false,note:'10 each then max hold',inputType:'reps'},
+      {id:'l2_sled_bwd',   name:'Sled Backward Push (Warm-Up)', sets:1,defaultReps:'10',   hasWeight:true, defaultWeight:'160',superset:false,inputType:'minutes',restSeconds:0,note:'10 mins continuous. Swapped from forward push — backward sled is therapeutic for patellar tendinopathy, VMO loads without tendon compression.'},
+      {id:'l2_sled_bwd2',  name:'Sled Backward Push',           sets:3,defaultReps:'4',    hasWeight:true, defaultWeight:'220',superset:false,inputType:'reps',restSeconds:90,note:'3 rounds × 4 × 9m @ 220kg. Drive through forefoot each rep — practises the midfoot loading pattern. Full 3 rounds maintained.'},
+      {id:'l2_sled_fwd',   name:'Sled Forward Push',            sets:2,defaultReps:'4',    hasWeight:true, defaultWeight:'200',superset:false,inputType:'reps',restSeconds:90,note:'Dropped from 240kg/3 rounds to 200kg/2 rounds. Rebuild to 240kg/3 rounds over 4–6 weeks. Stop if anterior knee pain.'},
+      {id:'l2_splitfloat', name:'DB Split Squat (Floating Heel)',sets:4,defaultReps:'8ea',  hasWeight:true, superset:false,inputType:'reps',restSeconds:90,note:'Replaces Box Squat 5×10. Heel 1mm off floor throughout. Encourages midfoot pressure Gus flagged as deficient.'},
+      {id:'l2_slouch',     name:'Slouch Split Squat',           sets:3,defaultReps:'8ea',  hasWeight:false,superset:false,inputType:'reps',restSeconds:90,note:'Heel stays just off the floor. Compounds the forefoot loading from above.'},
+      {id:'l2_banded_tke', name:'Banded TKE Staggered Stance',  sets:3,defaultReps:'12ea', hasWeight:false,superset:true, ssLabel:'SS',inputType:'reps',restSeconds:60,note:'Core rehab for patellar enthesitis. Strengthens VMO without loading tendon through full flexion.'},
+      {id:'l2_legraise',   name:'Leg Raises',                   sets:3,defaultReps:'10',   hasWeight:false,superset:true, ssLabel:'SS',inputType:'reps',restSeconds:60},
+      {id:'l2_quad_iso',   name:'Quad Extension (Isometric Hold)',sets:3,defaultReps:'5',   hasWeight:true, superset:false,inputType:'reps',restSeconds:90,note:'8–10s holds at 60–90° flexion. Evidence-based for patellar tendinopathy. Left side priority. Log weight used.'},
+      {id:'l2_slsquat',    name:'Elevated SL Squats',           sets:3,defaultReps:'8ea',  hasWeight:false,superset:true, ssLabel:'SS',inputType:'reps',restSeconds:90,note:'Reduce range of motion if anterior knee pain. Stay out of deep flexion for now.'},
+      {id:'l2_rollout',    name:'Barbell Ab Rollouts',          sets:3,defaultReps:'5',    hasWeight:true, superset:true, ssLabel:'SS',inputType:'reps',restSeconds:90},
+      {id:'l2_calf_wall',  name:'Single Leg Wall Lean Calf Raise',sets:3,defaultReps:'12ea',hasWeight:false,superset:false,inputType:'reps',restSeconds:60,note:'Left calf is session finisher — more reps left side. Bilateral inability to pronate is altering knee loading mechanics.'},
     ]},
   cardio:{name:'CARDIO',sub:'Conditioning',duration:'Variable',
     warmup:[],
@@ -1389,8 +1396,11 @@ let _cardioExId=null, _cardioSetIdx=null, _cardioType='liss', _cardioMachine='';
 function isCardioExercise(exId){
   const cardioIds=['c_liss','c_hiit','c_padel','c_tenn','lib_liss','lib_hiit','lib_rowing','lib_cycling','lib_padel','lib_tennis','lib_swim'];
   if(cardioIds.includes(exId))return true;
-  const ex=SESSIONS[activeKey]&&SESSIONS[activeKey].exercises.find(e=>e.id===exId);
-  return ex&&(ex.inputType==='minutes'||getMuscleGroup(exId).startsWith('Cardio'));
+  if(!activeKey||!SESSIONS[activeKey])return false;
+  const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  if(!ex)return false;
+  if(ex.inputType==='minutes')return true;
+  try{return getMuscleGroup(exId).startsWith('Cardio');}catch{return false;}
 }
 
 function getDefaultCardioType(exId){
@@ -1675,7 +1685,11 @@ function openSetModal(exId, setIdx){
     return;
   }
   imExId=exId; imSetIdx=setIdx;
-  const ex=SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  const ex=SESSIONS[activeKey]&&SESSIONS[activeKey].exercises.find(e=>e.id===exId);
+  if(!ex){closeInputModal();return;}
+  // Guard: ensure logData initialised for this exercise/set
+  if(!logData[exId])logData[exId]=Array.from({length:ex.sets},()=>({reps:'',weight:'',rpe:null,done:false,inputType:ex.inputType||'reps'}));
+  while(logData[exId].length<=setIdx)logData[exId].push({reps:'',weight:'',rpe:null,done:false,inputType:ex.inputType||'reps'});
   const iType=ex.inputType||'reps';
   const wtType=ex.weightType||'none';
   const hasWtCol=ex.hasWeight||(wtType==='seconds');
@@ -2158,16 +2172,17 @@ function _loadSession(key){
       <div id="gymNote_${ex.id}" style="display:none;padding:10px 16px;font-family:var(--font-mono);font-size:12px;color:${gymNote?'var(--ink2)':'var(--ink3)'};line-height:1.5;white-space:pre-wrap;background:var(--surface);border-top:1px solid var(--border);">${gymNote||'No settings saved — add via Settings → GYM SETTINGS'}</div>
     </div>`;
     html+=`<div class="ex-card${ex.superset?' superset':''}" id="exc_${ex.id}">
-      <div class="ex-head" onclick="toggleEx('${ex.id}')">
-        <div class="ex-head-left">
+      <div style="display:flex;align-items:stretch;min-height:56px;">
+        <div style="flex:1;min-width:0;padding:13px 16px;cursor:pointer;user-select:none;" onclick="toggleEx('${ex.id}')">
           <div class="ex-name">${ex.name}</div>
-          <div class="ex-target">${ex.sets}×${iType==='seconds'?ex.defaultReps+'s':iType==='minutes'?ex.defaultReps+' min':ex.defaultReps}${ex.hasWeight&&ex.defaultWeight?' · '+ex.defaultWeight+'kg':''}</div>
+          <div class="ex-target">${ex.sets}×${iType==='seconds'?ex.defaultReps+'s':iType==='minutes'?ex.defaultReps+' min':ex.defaultReps}${ex.hasWeight&&ex.defaultWeight?' · '+ex.defaultWeight+'kg':''}${ex.restSeconds?' · '+fmtTime(ex.restSeconds||90)+' rest':''}</div>
+          <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">
+            ${(ex.format&&ex.format!=='normal')?`<span class="format-badge format-${ex.format}">${ex.format.toUpperCase()}</span>`:''}
+            ${ex.superset&&(!ex.format||ex.format==='normal')?`<span class="ss-pill">${ex.ssLabel||'SS'}</span>`:''}
+          </div>
         </div>
-        <div class="ex-head-right">
-          ${(ex.format&&ex.format!=='normal')?`<span class="format-badge format-${ex.format}">${ex.format.toUpperCase()}</span>`:''}
-          ${ex.superset&&(!ex.format||ex.format==='normal')?`<span class="ss-pill">${ex.ssLabel||'SS'}</span>`:''}
-          <span class="chevron" id="chv_${ex.id}">▾</span>
-        </div>
+        <button onclick="toggleEx('${ex.id}')" id="chv_${ex.id}"
+          style="background:none;border:none;border-left:1px solid var(--border);min-width:52px;padding:0 16px;cursor:pointer;color:var(--ink3);font-size:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:color 0.15s;">▾</button>
       </div>
       ${gymBadge}
       <div class="ex-body" id="exb_${ex.id}">
@@ -2643,7 +2658,13 @@ function swapExercise(exIdx, newExId){
   if(savedStart){document.getElementById('timerBar').classList.add('active');document.getElementById('startBtn').textContent='● RUNNING';}
 }
 
-function toggleEx(id){document.getElementById('exb_'+id).classList.toggle('open');document.getElementById('chv_'+id).classList.toggle('open');}
+function toggleEx(id){
+  const body=document.getElementById('exb_'+id);
+  const chv=document.getElementById('chv_'+id);
+  if(!body)return;
+  body.classList.toggle('open');
+  if(chv)chv.textContent=body.classList.contains('open')?'▴':'▾';
+}
 function cancelSession(){
   // confirm() can be blocked in iOS PWA — use inline prompt instead
   const bar=document.getElementById('timerBar');
@@ -2927,21 +2948,21 @@ function showSuggestion(exId){
   }
 
   // ── STEP 1: REP RANGE COMPLIANCE ──
+  const isBodyweight=!ex.hasWeight||(ex.hasWeight&&curWeight===0);
   if(anyBelowTarget && avgRpe>=8.5){
-    // Significantly below target AND high RPE = weight too heavy
-    steps.push({type:'drop',text:`Step 1: Avg ${avgReps.toFixed(1)} reps vs target ${targetRepVal} at RPE ${avgRpe.toFixed(1)} — load too high`});
-    if(ex.hasWeight&&curWeight>0){
+    steps.push({type:'drop',text:`Step 1: Avg ${avgReps.toFixed(1)} reps vs target ${targetRepVal} at RPE ${avgRpe.toFixed(1)} — too hard`});
+    if(!isBodyweight){
       const dropWeight=Math.round(curWeight*0.9*2)/2;
       cardClass='suggestion-card drop';
       finalLabel='WEIGHT TOO HEAVY — DROP LOAD';
-      finalText=`Averaging ${avgReps.toFixed(1)} reps vs your ${targetRepVal}-rep target at RPE ${avgRpe.toFixed(1)}. The load is exceeding your capacity — reduce it to lock in clean reps and rebuild.`;
+      finalText=`Averaging ${avgReps.toFixed(1)} reps vs your ${targetRepVal}-rep target at RPE ${avgRpe.toFixed(1)}. Reduce the load to lock in clean reps and rebuild.`;
       finalDetail=`Suggested: ${curWeight}kg → ${dropWeight}kg next session`;
     } else {
-      // Bodyweight — suggest more rest or fewer reps
-      cardClass='suggestion-card drop';
-      finalLabel='VOLUME TOO HIGH — REDUCE';
-      finalText=`Averaging ${avgReps.toFixed(1)} reps vs target ${targetRepVal} at RPE ${avgRpe.toFixed(1)}. Drop reps or extend rest to maintain quality.`;
-      finalDetail=`Reduce to ${Math.max(3,Math.round(avgReps)-1)} reps · extend rest to ${fmtTime(Math.min((ex.restSeconds||90)+30,180))}`;
+      // Bodyweight — never suggest weight drop, suggest volume/rest reduction
+      cardClass='suggestion-card warn';
+      finalLabel='TOO HARD — REDUCE REPS OR EXTEND REST';
+      finalText=`Averaging ${avgReps.toFixed(1)} reps vs target ${targetRepVal} at RPE ${avgRpe.toFixed(1)}. This is a bodyweight exercise — focus on quality by trimming reps or taking longer rest.`;
+      finalDetail=`Try: ${Math.max(3,Math.round(avgReps)-1)} reps per set · ${fmtTime(Math.min((ex.restSeconds||90)+30,180))} rest`;
     }
     el.innerHTML=buildSugCard(cardClass,finalLabel,finalText,finalDetail,steps);
     return;
@@ -3017,17 +3038,17 @@ function showSuggestion(exId){
     steps.push({type:'active',text:`Step 4: Progression triggered — ${goal} protocol`});
 
     if(goal==='strength'){
-      if(ex.hasWeight&&curWeight>0){
+      if(!isBodyweight){
         cardClass='suggestion-card';
         finalLabel='READY TO PROGRESS — ADD WEIGHT';
         finalText=`Strength protocol: RPE ${avgRpe.toFixed(1)} at ${curWeight}kg. Time to load up. Keep reps in the ${targetReps[0]}-${targetReps[1]} range.`;
         finalDetail=`Next session: ${curWeight+weightInc}kg · ${ex.sets} sets · ${targetReps[0]}-${targetReps[1]} reps`;
       } else {
-        // Bodyweight — add reps first, then harder variation
+        // Bodyweight — add reps, then suggest weighted variation
         const newReps=Math.round(avgReps)+1;
         cardClass='suggestion-card';
         finalLabel='READY TO PROGRESS — ADD REPS';
-        finalText=`Bodyweight exercise at RPE ${avgRpe.toFixed(1)}. Add a rep per set — when you can do ${targetRepVal+3} reps cleanly, progress to a harder variation.`;
+        finalText=`Bodyweight at RPE ${avgRpe.toFixed(1)}. Add a rep per set this session. Once you hit ${targetRepVal+2} consistently, consider adding a weight vest or progressing to a harder variation.`;
         finalDetail=`Next session: aim for ${newReps} reps · reduce rest to ${fmtTime(Math.max(45,(ex.restSeconds||90)-15))}`;
       }
     } else if(goal==='hypertrophy'){
@@ -3793,7 +3814,8 @@ function renderBody(){
     <div class="body-form-row"><div class="body-field-wrap"><label class="body-field-label">Weight (kg)</label><input class="body-field" type="number" id="bfWeight" step="0.1" placeholder="81.5"></div>
     <div class="body-field-wrap"><label class="body-field-label">Body Fat (%)</label><input class="body-field" type="number" id="bfBf" step="0.1" placeholder="11.0"></div></div>
     <div class="body-form-row" style="margin-top:10px;"><div class="body-field-wrap"><label class="body-field-label">Date</label><input class="body-field" type="date" id="bfDate" value="${todayStr}"></div>
-    <div class="body-field-wrap" style="justify-content:flex-end;"><label class="body-field-label">&nbsp;</label><button class="body-submit" onclick="logBodyEntry()">SAVE</button></div></div>
+    <div class="body-field-wrap"><label class="body-field-label">Note (optional)</label><input class="body-field" type="text" id="bfNote" placeholder="e.g. Back from holiday, before cut..." style="font-size:14px;"></div></div>
+    <div style="margin-top:10px;"><button class="body-submit" onclick="logBodyEntry()">SAVE</button></div>
     <div style="margin-top:12px;"><label class="body-field-label" style="display:block;margin-bottom:4px;">Progress Photo</label>
     <label class="photo-upload-btn" for="bfPhotoInput">📷 Add photo</label>
     <input type="file" id="bfPhotoInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event,'${todayStr}')">
@@ -3809,9 +3831,10 @@ function renderBody(){
       const bDeltaHtml=bDelta!==null?`<td class="${bDelta<0?'delta-down':bDelta>0?'delta-up':''}">${bDelta>0?'+':''}${bDelta.toFixed(1)}%</td>`:'<td style="color:var(--ink3)">—</td>';
       const entryPhotos=getPhotos(e.date);
       const photoCell=entryPhotos.length?`<td><div style="display:flex;gap:4px;">${entryPhotos.map((src,pi)=>`<img src="${src}" onclick="openLightbox('${e.date}',${pi})" style="width:36px;height:36px;object-fit:cover;border:1px solid var(--border);cursor:pointer;">`).join('')}</div></td>`:`<td style="color:var(--border2);text-align:center;">—</td>`;
-      return `<tr><td>${new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}).toUpperCase()}</td><td>${e.weight?parseFloat(e.weight).toFixed(1)+' kg':'—'}</td>${wDeltaHtml}<td>${e.bf?parseFloat(e.bf).toFixed(1)+'%':'—'}</td>${bDeltaHtml}${photoCell}<td><button class="body-del-btn" onclick="deleteBodyEntry(${i})">✕</button></td></tr>`;
+      const noteCell=e.note?`<td style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);font-style:italic;max-width:120px;">${e.note}</td>`:`<td style="color:var(--border2);text-align:center;">—</td>`;
+      return `<tr><td>${new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}).toUpperCase()}</td><td>${e.weight?parseFloat(e.weight).toFixed(1)+' kg':'—'}</td>${wDeltaHtml}<td>${e.bf?parseFloat(e.bf).toFixed(1)+'%':'—'}</td>${bDeltaHtml}${noteCell}${photoCell}<td><button class="body-del-btn" onclick="deleteBodyEntry(${i})">✕</button></td></tr>`;
     }).join('');
-    tableHtml=`<div style="overflow-x:auto;"><table class="body-table"><tr><th>Date</th><th>Weight</th><th>Δ</th><th>BF%</th><th>Δ</th><th>Photo</th><th></th></tr>${rows}</table></div>`;
+    tableHtml=`<div style="overflow-x:auto;"><table class="body-table"><tr><th>Date</th><th>Weight</th><th>Δ</th><th>BF%</th><th>Δ</th><th>Note</th><th>Photo</th><th></th></tr>${rows}</table></div>`;
   } else {tableHtml=`<div class="empty-state">No entries yet.</div>`;}
   el.innerHTML=statsHtml+logForm+chartHtml+`<div class="slabel" style="margin-top:20px;">HISTORY</div>`+tableHtml;
 }
@@ -3846,11 +3869,19 @@ function handlePhotoUpload(event,date){
 }
 function openLightbox(date,idx){const photos=getPhotos(date);if(!photos[idx])return;const lb=document.getElementById('photoLightbox');lb.querySelector('img').src=photos[idx];lb.style.display='flex';}
 function logBodyEntry(){
-  const weight=document.getElementById('bfWeight').value.trim();const bf=document.getElementById('bfBf').value.trim();const date=document.getElementById('bfDate').value;
-  if(!weight&&!bf){alert('Enter at least one value');return;}if(!date){alert('Pick a date');return;}
-  const log=getBodyLog();const existIdx=log.findIndex(e=>e.date===date);const entry={date,weight:weight||null,bf:bf||null};
-  if(existIdx>=0){if(!confirm('Entry for this date exists. Replace it?'))return;log[existIdx]=entry;}else log.push(entry);
-  log.sort((a,b)=>new Date(b.date)-new Date(a.date));saveBodyLog(log);renderBody();
+  const weight=document.getElementById('bfWeight').value.trim();
+  const bf=document.getElementById('bfBf').value.trim();
+  const date=document.getElementById('bfDate').value;
+  const note=(document.getElementById('bfNote')&&document.getElementById('bfNote').value.trim())||'';
+  if(!weight&&!bf){alert('Enter at least one value');return;}
+  if(!date){alert('Pick a date');return;}
+  const log=getBodyLog();
+  const existIdx=log.findIndex(e=>e.date===date);
+  const entry={date,weight:weight||null,bf:bf||null,note:note||null};
+  if(existIdx>=0){if(!confirm('Entry for this date exists. Replace it?'))return;log[existIdx]=entry;}
+  else log.push(entry);
+  log.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  saveBodyLog(log);renderBody();
 }
 function deleteBodyEntry(idx){if(!confirm('Delete this entry?'))return;const log=getBodyLog();log.splice(idx,1);saveBodyLog(log);renderBody();}
 
@@ -4205,6 +4236,9 @@ function removeGymSetting(exId){const gymData=getGymSettings();delete gymData[ex
 // ═══════════════════════════════════════════════════
 // SETTINGS
 // ═══════════════════════════════════════════════════
+const APP_VERSION='v2.8';
+const APP_BUILD_DATE='19 May 2026';
+
 function renderSettings(){
   const pinEnabled=isPinEnabled();
   document.getElementById('settingsContent').innerHTML=`
@@ -4242,6 +4276,23 @@ function renderSettings(){
       <div class="settings-card"><div class="settings-row"><div><div class="settings-label">Import Data</div><div class="settings-hint">Restore from a Fox Fit .json backup</div></div><label class="settings-btn" style="cursor:pointer;" for="importFileInput">IMPORT ←</label></div>
         <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importData(event)">
         <div id="importResult" style="display:none;font-family:var(--font-mono);font-size:11px;margin-top:12px;padding:10px 12px;border:1px solid var(--border);"></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">APP INFO</div>
+      <div class="settings-section-sub">Version and build information</div>
+      <div class="settings-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div>
+            <div style="font-family:var(--font-display);font-size:28px;letter-spacing:2px;color:var(--lime);">FOX FIT ${APP_VERSION}</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink3);margin-top:3px;letter-spacing:1px;">Last updated: ${APP_BUILD_DATE}</div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--border2);text-align:right;">
+            <div>Single file PWA</div>
+            <div>localStorage persistence</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4729,6 +4780,15 @@ function initApp(){
   else{document.getElementById('pinLockScreen').style.display='none';document.getElementById('appWrapper').style.display='block';bootApp();}
 }
 function bootApp(){
+  // ── ONE-TIME MIGRATION: apply updated leg day sessions ──
+  const MIG_KEY = 'foxfit_leg_migration_v1';
+  if (!localStorage.getItem(MIG_KEY)) {
+    SESSIONS.lower1 = JSON.parse(JSON.stringify(DEFAULT_SESSIONS.lower1));
+    SESSIONS.lower2 = JSON.parse(JSON.stringify(DEFAULT_SESSIONS.lower2));
+    saveSessions(SESSIONS);
+    localStorage.setItem(MIG_KEY, '1');
+  }
+  // ── END MIGRATION ──
   document.getElementById('headerDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
   try{renderPicker();}catch(e){showError('renderPicker: '+e.message+'\n'+e.stack);}
 }
